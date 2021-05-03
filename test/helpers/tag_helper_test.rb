@@ -10,12 +10,18 @@ module VitalsImage
 
     test "that the image tag works for urls" do
       assert_dom_equal '<img class="vitals-image" loading="lazy" decoding="async" src="https://festalab-fixtures.s3.amazonaws.com/cat.jpg" />', vitals_image_tag("https://festalab-fixtures.s3.amazonaws.com/cat.jpg")
-      assert_dom_equal '<img width="1401" height="2102" style="height: auto" class="vitals-image" loading="lazy" decoding="async" src="https://festalab-fixtures.s3.amazonaws.com/cat.jpg" />', vitals_image_tag("https://festalab-fixtures.s3.amazonaws.com/dog.jpg")
+      assert_dom_equal '<img width="1401" height="2102" style="height:auto;" class="vitals-image" loading="lazy" decoding="async" src="https://festalab-fixtures.s3.amazonaws.com/dog.jpg" />', vitals_image_tag("https://festalab-fixtures.s3.amazonaws.com/dog.jpg")
     end
 
     test "that the image tag works for active_storage" do
       blob = create_file_blob(filename: "dog.jpg", content_type: "image/jpg", metadata: { analyzed: false })
       assert_dom_equal %{<img class="vitals-image" loading="lazy" decoding="async" src="#{url_for(blob)}" />}, vitals_image_tag(blob)
+
+      blob = create_file_blob(filename: "dog.jpg", content_type: "image/jpg", metadata: { analyzed: true, width: 100, height: 100 })
+      optimizer = VitalsImage::Base.optimizer(blob)
+      url = vitals_image_url(optimizer.src, optimizer.html_options)
+
+      assert_dom_equal %{<img width="100" height="100" style="height:auto;" class="vitals-image" loading="lazy" decoding="async" src="#{url}" />}, vitals_image_tag(blob)
     end
 
     test "that non native lazy image tag works for blank" do

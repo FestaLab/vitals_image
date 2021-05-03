@@ -73,7 +73,7 @@ After:
 You might however decide to use a different width or height for your images. No problem, give one dimension, and `vitals_image` will figure out the other.
 ```rhtml
 <%= vitals_image_tag "icon.svg", width: 10 %>
-<img src="icon.svg" width="10" height="20" loading="lazy" decoding="async" style="height: auto" />
+<img src="icon.svg" width="10" height="20" loading="lazy" decoding="async" style="height: auto;" />
 ```
 
 If you do the same in active storage, instead of the original image, you will get an optimized variant:
@@ -101,7 +101,7 @@ For an active storage image, it has two possible strategies for the resize:
 You can disable lazy loading if you want:
 ```rhtml
 <%= vitals_image_tag "icon.svg", lazy_load: false %>
-<img src="icon.svg" width="20" height="40" style="height: auto" />
+<img src="icon.svg" width="20" height="40" style="height: auto;" />
 ```
 
 You can also choose a different route strategy for active storage, than the one it uses by default:

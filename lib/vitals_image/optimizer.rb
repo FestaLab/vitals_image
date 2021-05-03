@@ -91,11 +91,11 @@ module VitalsImage
       end
 
       def scale_x
-        requested_width ? requested_width.to_f / original_width : 1.0
+        requested_width ? requested_width / original_width : 1.0
       end
 
       def scale_y
-        requested_height ? requested_height.to_f / original_height : 1.0
+        requested_height ? requested_height / original_height : 1.0
       end
 
       def fixed_dimensions?
@@ -103,11 +103,11 @@ module VitalsImage
       end
 
       def requested_width
-        @options["width"]
+        @options["width"].to_f if @options["width"]
       end
 
       def requested_height
-        @options["height"]
+        @options["height"].to_f if @options["height"]
       end
 
 
