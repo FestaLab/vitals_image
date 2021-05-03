@@ -20,7 +20,7 @@ And then execute:
 
 Finally copy over the migration:
 
-    $ bin/rails blorgh:install:migrations
+    $ bin/rails vitals_image:install:migrations
 
 ## Usage
 
