@@ -24,6 +24,99 @@ Or install it yourself as:
 
 ## Usage
 
+### Basics 
+The simplest usage for `vitals_image` is to replace a normal `image_tag` with it.
+
+Before:
+```rhtml
+<%= image_tag "icon.svg" %>
+<img src="icon.svg" />
+```
+
+After:
+```rhtml
+<%= vitals_image_tag "icon.svg" %>
+
+<!-- First time the image is seem -->
+<img src="icon.svg" loading="lazy" decoding="async" />
+
+<!-- Second time the image is seem -->
+<img src="icon.svg" width="20" height="40" loading="lazy" decoding="async" style="height: auto;" />
+```
+
+If the supplied source is an external url, or the url of an asset, `vitals_image` will, in a background job, download the image, analyze it and store its width and height, so that the next time it is seem, they can be applied, reducing the page's CLS. As for the extra tags:
+
+- `loading`: setting it to `lazy` allows Chrome to lazy load images that are not in the viewport without the need for a lazy load library.
+- `decoding`: another optimization similar to `loading`, which allows image to the decoded asynchronously.
+- `style`: setting `height: auto` allows your CSS to choose a different `width` for your image (`width: 100%;`) while keeping its aspect ratio intact and still benefitting from no impact on the CLS
+
+The same can be done with an active storage image:
+
+Before:
+```rhtml
+<%= image_tag user.avatar %>
+<img src="/rails/active_storage/blobs/redirect/(...).photo.jpeg" />
+```
+
+After:
+```rhtml
+<%= vitals_image_tag user.avatar %>
+
+<!-- Before active storage has analyzed the image -->
+<img src="/rails/active_storage/blobs/redirect/(...).photo.jpeg" loading="lazy" decoding="async" />
+
+<!-- After active storage has analyzed the image -->
+<img src="/rails/active_storage/blobs/redirect/(...).photo.jpeg" width="200" height="200" loading="lazy" decoding="async" style="height: auto;" />
+```
+
+### Setting width and height
+You might however decide to use a different width or height for your images. No problem, give one dimension, and `vitals_image` will figure out the other.
+```rhtml
+<%= vitals_image_tag "icon.svg", width: 10 %>
+<img src="icon.svg" width="10" height="20" loading="lazy" decoding="async" style="height: auto" />
+```
+
+If you do the same in active storage, instead of the original image, you will get an optimized variant:
+```rhtml
+<%= vitals_image_tag user.avatar width: 100 %>
+<img src="/rails/active_storage/representations/redirect/(...).photo.jpeg" width="100" height="100" loading="lazy" decoding="async" style="height: auto;" />
+```
+
+To see which optimizations will be applied (and change them if you wish, check the "Configuration" section.)
+
+If you set both a width and a height and end up with a different aspect ratio than the image has, Vitals Image will make a "best guess" at what you want.
+
+For an image from an url, which it cannot apply transformations to, it will use `object-fit`
+```rhtml
+<%= vitals_image_tag "icon.svg", width: 100, height: 40 %>
+<img src="icon.svg" width="100" height="40" style="object-fit: contain" />
+```
+
+For an active storage image, it has two possible strategies for the resize:
+
+- `resize_to_limit`: This is the default. Downsizes the image to fit within the specified dimensions while retaining the original aspect ratio. Will only resize the image if it's larger than the specified dimensions.
+- `resize_and_pad`: This only be used if Vitals Image know that this image is an object in a white background. For that to work you must set `image_library = :vips` and `check_for_white_background = true` in your configuration. This will cause Vitals Image to replace the normal `analyze_job` that Active Storage uses, with a custom one that will add the attribute `isolated` to the blobs metadata,  
+
+### Advanced options
+You can disable lazy loading if you want:
+```rhtml
+<%= vitals_image_tag "icon.svg", lazy_load: false %>
+<img src="icon.svg" width="20" height="40" style="height: auto" />
+```
+
+You can also choose a different route strategy for active storage, than the one it uses by default:
+```rhtml
+<%= vitals_image_tag user.avatar, active_storage_route: :proxy %>
+<img src="/rails/active_storage/representations/proxy/(...).photo.jpeg" width="100" height="100" loading="lazy" decoding="async" style="height: auto;" />
+```
+
+If you set the height, you will not get the `auto` added to it:
+```rhtml
+<%= vitals_image_tag "icon.svg", height: 20 %>
+<img src="icon.svg" width="10" height="20" />
+```
+
+
 
 ## Configuration
 The following configuration options are available. The defaults were chosen for maximum compatibility and least surprises, while the values under "Recommended" are what the app from which this gem was extracted uses. 
@@ -71,6 +164,22 @@ end
 ```
 
 Heads up! If you are already on Rails 7.0.0.alpha, make sure you are not using  `image_decoding` and `image_loading` config options below, as they will forcibly add native lazy loading and async decoding to the tags.
+
+### Customization
+If your use case requires it, you can easily add extra `optimizers` and `analyzers`, just like you would in Active Storage. Start by inheriting the abstract classes.
+
+```ruby
+class Base64ImageOptimizer < VitalsImage::Optimizer; end
+class Base64ImageAnalyzer < VitalsImage::Analyzer; end
+```
+
+And them during config add them ahead of others:
+```ruby
+Rails.application.configure do |config|
+  config.vitals_image.optimizers.prepend Base64ImageOptimizer
+  config.vitals_image.analyzers.prepend Base64ImageAnalyzer
+end
+```
 
 ### TODO
 

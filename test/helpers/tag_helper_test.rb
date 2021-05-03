@@ -10,6 +10,7 @@ module VitalsImage
 
     test "that the image tag works for urls" do
       assert_dom_equal '<img class="vitals-image" loading="lazy" decoding="async" src="https://festalab-fixtures.s3.amazonaws.com/cat.jpg" />', vitals_image_tag("https://festalab-fixtures.s3.amazonaws.com/cat.jpg")
+      assert_dom_equal '<img width="1401" height="2102" style="height: auto" class="vitals-image" loading="lazy" decoding="async" src="https://festalab-fixtures.s3.amazonaws.com/cat.jpg" />', vitals_image_tag("https://festalab-fixtures.s3.amazonaws.com/dog.jpg")
     end
 
     test "that the image tag works for active_storage" do
