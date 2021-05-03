@@ -9,7 +9,15 @@ module VitalsImage
     end
 
     def locate(key)
-      @store.fetch(key) { Source.find_or_create_by!(key: key) }
+      source = @store.read(key)
+
+      if source.blank?
+        source = Source.create_or_find_by(key: key)
+        expires_in = source.analyzed ? nil : 1.minute
+        @store.write(key, source, expires_in: expires_in)
+      end
+
+      source
     end
   end
 end

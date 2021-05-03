@@ -31,5 +31,18 @@ module VitalsImage
       source = VitalsImage::Cache.instance.locate("https://festalab-fixtures.s3.amazonaws.com/dog.jpg")
       assert_equal 1401, source.width
     end
+
+    test "that only sources that were not analyzed expire in in minute in the cache" do
+      cat = vitals_image_sources(:cat).key
+      dog = vitals_image_sources(:dog).key
+
+      VitalsImage::Cache.instance.locate(cat)
+      VitalsImage::Cache.instance.locate(dog)
+
+      data = VitalsImage::Cache.instance.instance_variable_get(:@store).instance_variable_get(:@data)
+
+      assert Time.at(data[cat].expires_at) < Time.now + 61.seconds
+      assert_nil data[dog].expires_at
+    end
   end
 end
