@@ -1,4 +1,4 @@
-name: Ruby
+name: vitals-image-main
 
 on: [push,pull_request]
 
@@ -6,11 +6,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Ubuntu dependencies
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run:
+        sudo -E apt-get install --fix-missing -qq -o Acquire::Retries=3
+        libvips-tools
+
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 3.0.1
+        ruby-version: 2.5
         bundler-cache: true
+
     - name: Run the default task
       run: bundle exec rake

@@ -1,37 +1,42 @@
+# coding: utf-8
 # frozen_string_literal: true
 
 require_relative "lib/vitals_image/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "vitals_image"
-  spec.version       = VitalsImage::VERSION
+  spec.version       = VitalsImage::VERSION::STRING
   spec.authors       = ["Breno Gazzola"]
-  spec.email         = ["breno.gazzola@gmail.com"]
+  spec.email         = ["breno@festalab.com"]
 
   spec.summary       = "Image tags that conform with web vitals"
-  spec.description   = "Vitals Image is a lib that make it easier to create image tags that follow best practices for fast loading web pages"
   spec.homepage      = "https://github.com/FestaLab/vitals_image"
   spec.license       = "MIT"
-  spec.required_ruby_version = Gem::Requirement.new(">= 2.7.0")
 
-  spec.metadata["allowed_push_host"] = "http://rubygems.org"
+  # spec.metadata["allowed_push_host"] = "http://rubygems.org"
 
-  spec.metadata["homepage_uri"] = spec.homepage
+  spec.metadata["homepage_uri"]    = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/FestaLab/vitals_image"
-  spec.metadata["changelog_uri"] = "https://github.com/FestaLab/vitals_image/CHANGELOG.mg"
+  spec.metadata["changelog_uri"]   = "https://github.com/FestaLab/vitals_image/CHANGELOG.mg"
 
-  # Specify which files should be added to the gem when it is released.
-  # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
-  spec.files = Dir.chdir(File.expand_path(__dir__)) do
-    `git ls-files -z`.split("\x0").reject { |f| f.match(%r{\A(?:test|spec|features)/}) }
-  end
-  spec.bindir        = "exe"
-  spec.executables   = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
+  spec.files         = Dir["{app,config,db,lib}/**/*", "Rakefile", "MIT-LICENSE", "README.md""CHANGELOG.md"]
   spec.require_paths = ["lib"]
 
-  # Uncomment to register a new dependency of your gem
-  spec.add_dependency "ruby-vips", ">= 2.0.17"
+  spec.required_ruby_version = Gem::Requirement.new(">= 2.5.0")
 
-  # For more information and examples about making a new gem, checkout our
-  # guide at: https://bundler.io/guides/creating_gem.html
+  spec.add_dependency "activejob",      [">= 6.1.3.1", "< 7.0"]
+  spec.add_dependency "activemodel",    [">= 6.1.3.1", "< 7.0"]
+  spec.add_dependency "activerecord",   [">= 6.1.3.1", "< 7.0"]
+  spec.add_dependency "activestorage",  [">= 6.1.3.1", "< 7.0"]
+  spec.add_dependency "activesupport",  [">= 6.1.3.1", "< 7.0"]
+  spec.add_dependency "mini_magick",    [">= 4.9.5", "< 5"]
+  spec.add_dependency "ruby-vips",      ["2.0.17"] # 2.10 is bugged with vips 8.9 which is the one available in Ubuntu 20.04
+  spec.add_dependency "platform_agent"
+
+  spec.add_development_dependency "sqlite3"
+  spec.add_development_dependency "byebug"
+  spec.add_development_dependency "rubocop"
+  spec.add_development_dependency "rubocop-performance"
+  spec.add_development_dependency "rubocop-packaging"
+  spec.add_development_dependency "rubocop-rails"
 end

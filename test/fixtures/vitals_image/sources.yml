@@ -1,0 +1,7 @@
+dog:
+  key: "https://festalab-fixtures.s3.amazonaws.com/dog.jpg"
+  content_type: "image/jpeg"
+  metadata: '{"analyzed":true,"width":1401,"height":2102}'
+
+cat:
+  key: "https://festalab-fixtures.s3.amazonaws.com/cat.jpg"
