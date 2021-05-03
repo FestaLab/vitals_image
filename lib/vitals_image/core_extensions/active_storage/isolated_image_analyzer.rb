@@ -4,10 +4,6 @@ module VitalsImage
   module CoreExtensions
     module ActiveStorage
       class IsolatedImageAnalyzer < ImageAnalyzer
-        def self.accept?(blob)
-          blob.image? && blob.attachments.first&.record_type == VariantTemplate.name
-        end
-
         def metadata
           read_image do |image|
             if rotated_image?(image)
