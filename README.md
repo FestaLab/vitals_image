@@ -18,9 +18,9 @@ And then execute:
 
     $ bundle install
 
-Or install it yourself as:
+Finally copy over the migration:
 
-    $ gem install vitals_image
+    $ bin/rails blorgh:install:migrations
 
 ## Usage
 
