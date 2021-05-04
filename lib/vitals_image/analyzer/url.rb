@@ -31,7 +31,7 @@ module VitalsImage
 
       def download
         uri = URI.parse(source.key)
-        io = uri.open
+        io = uri.open(ssl_verify_mode: ssl_verify_mode)
         downloaded = Tempfile.new([File.basename(uri.path), File.extname(uri.path)])
 
         if io.is_a?(Tempfile)
@@ -45,6 +45,10 @@ module VitalsImage
       rescue
         logger.error "Failed to download #{source.key}"
         raise
+      end
+
+      def ssl_verify_mode
+        VitalsImage.skip_ssl_verification ? OpenSSL::SSL::VERIFY_NONE : nil
       end
   end
 end

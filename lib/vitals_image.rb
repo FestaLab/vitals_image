@@ -29,4 +29,6 @@ module VitalsImage
   mattr_accessor :jpeg_optimization
   mattr_accessor :png_optimization
   mattr_accessor :active_storage_route
+
+  mattr_accessor :skip_ssl_verification
 end

@@ -52,6 +52,8 @@ module VitalsImage
         VitalsImage.jpeg_optimization               = app.config.vitals_image.jpeg_optimization || { sampling_factor: "4:2:0", strip: true, interlace: "JPEG", colorspace: "sRGB", quality: 80 }
         VitalsImage.png_optimization                = app.config.vitals_image.png_optimization || { strip: true, quality: 00 }
         VitalsImage.active_storage_route            = app.config.vitals_image.png_optimization || :inherited
+
+        VitalsImage.skip_ssl_verification           = app.config.vitals_image.skip_ssl_verification || false
       end
     end
 
