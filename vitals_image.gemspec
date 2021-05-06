@@ -24,19 +24,19 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = Gem::Requirement.new(">= 2.5.0")
 
-  spec.add_dependency "activejob",      [">= 6.1.3.1", "< 7.0"]
-  spec.add_dependency "activemodel",    [">= 6.1.3.1", "< 7.0"]
-  spec.add_dependency "activerecord",   [">= 6.1.3.1", "< 7.0"]
-  spec.add_dependency "activestorage",  [">= 6.1.3.1", "< 7.0"]
-  spec.add_dependency "activesupport",  [">= 6.1.3.1", "< 7.0"]
-  spec.add_dependency "mini_magick",    [">= 4.9.5", "< 5"]
-  spec.add_dependency "ruby-vips",      ["2.0.17"] # 2.10 is bugged with vips 8.9 which is the one available in Ubuntu 20.04
-  spec.add_dependency "platform_agent"
+  spec.add_dependency "activejob",      "~> 6.1"
+  spec.add_dependency "activemodel",    "~> 6.1"
+  spec.add_dependency "activerecord",   "~> 6.1"
+  spec.add_dependency "activestorage",  "~> 6.1"
+  spec.add_dependency "activesupport",  "~> 6.1"
+  spec.add_dependency "mini_magick",    "~> 4.1"
+  spec.add_dependency "ruby-vips",      "~> 2.0"
+  spec.add_dependency "platform_agent", "~> 1.0"
 
-  spec.add_development_dependency "sqlite3"
-  spec.add_development_dependency "byebug"
-  spec.add_development_dependency "rubocop"
-  spec.add_development_dependency "rubocop-performance"
-  spec.add_development_dependency "rubocop-packaging"
-  spec.add_development_dependency "rubocop-rails"
+  spec.add_development_dependency "sqlite3",             "~> 1.4"
+  spec.add_development_dependency "byebug",              "~> 11.1"
+  spec.add_development_dependency "rubocop",             "~> 1.14"
+  spec.add_development_dependency "rubocop-performance", "~> 1.11"
+  spec.add_development_dependency "rubocop-packaging",   "~> 0.5"
+  spec.add_development_dependency "rubocop-rails",       "~> 2.10"
 end
