@@ -1,15 +1,13 @@
 # frozen_string_literal: true
 
+require_relative "../../app/models/vitals_image/source"
+
 module VitalsImage
   class Cache
     include Singleton
 
     def initialize
-      @store = if Rails.env.development? && !Rails.root.join("tmp", "caching-dev.txt").exist?
-        ActiveSupport::Cache::NullStore.new
-      else
-        ActiveSupport::Cache::MemoryStore.new
-      end
+      @store = ActiveSupport::Cache::MemoryStore.new
     end
 
     def locate(key)
