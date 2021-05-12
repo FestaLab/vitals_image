@@ -5,7 +5,11 @@ module VitalsImage
     include Singleton
 
     def initialize
-      @store = ActiveSupport::Cache::MemoryStore.new
+      @store = if Rails.env.development? && !Rails.root.join("tmp", "caching-dev.txt").exist?
+        ActiveSupport::Cache::NullStore.new
+      else
+        ActiveSupport::Cache::MemoryStore.new
+      end
     end
 
     def locate(key)
