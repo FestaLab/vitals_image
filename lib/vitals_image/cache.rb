@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative "../../app/models/vitals_image/source"
+
 module VitalsImage
   class Cache
     include Singleton
