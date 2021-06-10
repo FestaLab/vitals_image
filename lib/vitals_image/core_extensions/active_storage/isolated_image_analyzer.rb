@@ -21,8 +21,6 @@ module VitalsImage
             colors.all? { |color| color.all? { |value| value > 250 } }
           rescue
             false
-          ensure
-            corners.each { |path| File.delete(path) if File.exist?(path) }if defined?(corners)
           end
 
           def extract_corner_areas(image)
