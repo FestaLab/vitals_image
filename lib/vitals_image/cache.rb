@@ -11,15 +11,24 @@ module VitalsImage
     end
 
     def locate(key)
-      source = @store.read(key)
+      with_retry do
+        source = @store.read(key)
 
-      if source.blank?
-        source = Source.create_or_find_by(key: key)
-        expires_in = source.analyzed ? nil : 1.minute
-        @store.write(key, source, expires_in: expires_in)
+        if source.blank?
+          source = Source.find_or_create_by(key: key)
+          expires_in = source.analyzed ? nil : 1.minute
+          @store.write(key, source, expires_in: expires_in)
+        end
+
+        source
       end
-
-      source
     end
+
+    private
+      def with_retry
+        yield
+      rescue ActiveRecord::RecordNotUnique
+        yield
+      end
   end
 end
