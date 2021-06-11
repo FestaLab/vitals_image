@@ -13,25 +13,26 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/FestaLab/vitals_image"
   spec.license       = "MIT"
 
-  spec.metadata["allowed_push_host"] = "http://rubygems.org"
+  spec.metadata["allowed_push_host"] = "https://rubygems.org"
 
   spec.metadata["homepage_uri"]    = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/FestaLab/vitals_image"
   spec.metadata["changelog_uri"]   = "https://github.com/FestaLab/vitals_image/CHANGELOG.mg"
 
-  spec.files         = Dir["{app,config,db,lib}/**/*", "Rakefile", "MIT-LICENSE", "README.md""CHANGELOG.md"]
+  spec.files         = Dir["{app,config,db,lib}/**/*", "Rakefile", "MIT-LICENSE", "README.md", "CHANGELOG.md"]
   spec.require_paths = ["lib"]
 
   spec.required_ruby_version = Gem::Requirement.new(">= 2.5.0")
 
-  spec.add_dependency "activejob",      ">= 6.1"
-  spec.add_dependency "activemodel",    ">= 6.1"
-  spec.add_dependency "activerecord",   ">= 6.1"
-  spec.add_dependency "activestorage",  ">= 6.1"
-  spec.add_dependency "activesupport",  ">= 6.1"
-  spec.add_dependency "mini_magick",    ">= 4.1"
-  spec.add_dependency "ruby-vips",      ">= 2.0"
-  spec.add_dependency "platform_agent", ">= 1.0"
+  spec.add_dependency "activejob",       ">= 6.1"
+  spec.add_dependency "activemodel",     ">= 6.1"
+  spec.add_dependency "activerecord",    ">= 6.1"
+  spec.add_dependency "activestorage",   ">= 6.1"
+  spec.add_dependency "activesupport",   ">= 6.1"
+  spec.add_dependency "mini_magick",     ">= 4.1"
+  spec.add_dependency "ruby-vips",       ">= 2.0"
+  spec.add_dependency "platform_agent",  ">= 1.0"
+  spec.add_dependency "active_analysis", ">= 0.1"
 
   spec.add_development_dependency "sqlite3",             "~> 1.4"
   spec.add_development_dependency "byebug",              "~> 11.1"

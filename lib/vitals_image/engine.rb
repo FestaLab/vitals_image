@@ -58,16 +58,11 @@ module VitalsImage
     end
 
     initializer "vitals_image.core_extensions" do
-      require_relative "core_extensions/active_storage/image_analyzer"
-      require_relative "core_extensions/active_storage/isolated_image_analyzer"
+      require_relative "analyzer/isolated_image_analyzer"
 
       config.after_initialize do |app|
         if VitalsImage.check_for_white_background
-          app.config.active_storage.analyzers.delete ActiveStorage::Analyzer::ImageAnalyzer
-          app.config.active_storage.analyzers.prepend CoreExtensions::ActiveStorage::IsolatedImageAnalyzer
-        elsif VitalsImage.replace_active_storage_analyzer
-          app.config.active_storage.analyzers.delete ActiveStorage::Analyzer::ImageAnalyzer
-          app.config.active_storage.analyzers.prepend CoreExtensions::ActiveStorage::ImageAnalyzer
+          app.config.active_storage.analyzers.prepend Analyzer::IsolatedImageAnalyzer
         end
       end
     end
