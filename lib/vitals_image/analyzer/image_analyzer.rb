@@ -3,7 +3,7 @@
 require "active_analysis/analyzer/image_analyzer/vips"
 
 module VitalsImage
-  class Analyzer::IsolatedImageAnalyzer < ::ActiveAnalysis::Analyzer::ImageAnalyzer::Vips
+  class Analyzer::ImageAnalyzer < ::ActiveAnalysis::Analyzer::ImageAnalyzer::Vips
     def metadata
       read_image do |image|
         if rotated_image?(image)

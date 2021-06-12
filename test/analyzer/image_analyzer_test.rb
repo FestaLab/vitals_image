@@ -3,10 +3,10 @@
 require "test_helper"
 
 module VitalsImage
-  class IsolatedImageAnalyzerTest < ActiveSupport::TestCase
+  class ImageAnalyzerTest < ActiveSupport::TestCase
     test "that image is analyzed" do
       blob = create_file_blob(filename: "bird.jpg", content_type: "image/jpg")
-      metadata = Analyzer::IsolatedImageAnalyzer.new(blob).metadata
+      metadata = Analyzer::ImageAnalyzer.new(blob).metadata
 
       assert_equal 2000, metadata[:width]
       assert_equal 1333, metadata[:height]
@@ -14,7 +14,7 @@ module VitalsImage
 
     test "that an unsupported image is detected" do
       blob = create_file_blob(filename: "invalid.jpg", content_type: "image/jpg")
-      metadata = Analyzer::IsolatedImageAnalyzer.new(blob).metadata
+      metadata = Analyzer::ImageAnalyzer.new(blob).metadata
 
       assert_not metadata[:isolated]
     end

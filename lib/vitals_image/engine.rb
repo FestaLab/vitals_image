@@ -11,7 +11,7 @@ require "ruby-vips"
 require "mini_magick"
 
 require "vitals_image/analyzer"
-require "vitals_image/analyzer/url"
+require "vitals_image/analyzer/url_analyzer"
 require "vitals_image/base"
 require "vitals_image/cache"
 require "vitals_image/errors"
@@ -26,7 +26,7 @@ module VitalsImage
 
     config.vitals_image                                 = ActiveSupport::OrderedOptions.new
     config.vitals_image.optimizers                      = [VitalsImage::Optimizer::Blank, VitalsImage::Optimizer::ActiveStorage, VitalsImage::Optimizer::Url]
-    config.vitals_image.analyzers                       = [VitalsImage::Analyzer::Url]
+    config.vitals_image.analyzers                       = [VitalsImage::Analyzer::UrlAnalyzer]
 
     config.eager_load_namespaces << VitalsImage
 
@@ -58,11 +58,11 @@ module VitalsImage
     end
 
     initializer "vitals_image.core_extensions" do
-      require_relative "analyzer/isolated_image_analyzer"
+      require_relative "analyzer/image_analyzer"
 
       config.after_initialize do |app|
         if VitalsImage.check_for_white_background
-          app.config.active_storage.analyzers.prepend Analyzer::IsolatedImageAnalyzer
+          app.config.active_storage.analyzers.prepend Analyzer::ImageAnalyzer
         end
       end
     end

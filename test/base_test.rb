@@ -23,7 +23,7 @@ module VitalsImage
     end
 
     test "that the correct analyzer is chosen" do
-      assert VitalsImage::Base.analyzer(vitals_image_sources(:cat)).is_a?(VitalsImage::Analyzer::Url)
+      assert VitalsImage::Base.analyzer(vitals_image_sources(:cat)).is_a?(VitalsImage::Analyzer::UrlAnalyzer)
     end
 
     test "that an exception is raised if no analyzers are available for the specified source" do

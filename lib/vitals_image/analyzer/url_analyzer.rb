@@ -3,7 +3,7 @@
 require "open-uri"
 
 module VitalsImage
-  class Analyzer::Url < Analyzer
+  class Analyzer::UrlAnalyzer < Analyzer
     def self.accept?(source)
       source.is_a?(Source)
     end
