@@ -21,7 +21,6 @@ module VitalsImage
   mattr_accessor :lazy_loading_placeholder
   mattr_accessor :require_alt_attribute
 
-  mattr_accessor :replace_active_storage_analyzer
   mattr_accessor :check_for_white_background
 
   mattr_accessor :convert_to_jpeg

@@ -32,37 +32,44 @@ module VitalsImage
 
     initializer "vitals_image.configs" do
       config.after_initialize do |app|
-        VitalsImage.logger                          = app.config.vitals_image.logger || Rails.logger
-        VitalsImage.optimizers                      = app.config.vitals_image.optimizers || []
-        VitalsImage.analyzers                       = app.config.vitals_image.analyzers || []
-        VitalsImage.image_library                   = app.config.vitals_image.image_library || :mini_magick
+        VitalsImage.logger                     = app.config.vitals_image.logger                     || Rails.logger
+        VitalsImage.optimizers                 = app.config.vitals_image.optimizers                 || []
+        VitalsImage.analyzers                  = app.config.vitals_image.analyzers                  || []
+        VitalsImage.image_library              = app.config.vitals_image.image_library              || :mini_magick
 
-        VitalsImage.mobile_width                    = app.config.vitals_image.mobile_width || :original
-        VitalsImage.desktop_width                   = app.config.vitals_image.desktop_width || :original
-        VitalsImage.resolution                      = app.config.vitals_image.resolution || 2
-        VitalsImage.lazy_loading                    = app.config.vitals_image.lazy_loading || :native
-        VitalsImage.lazy_loading_placeholder        = app.config.vitals_image.lazy_loading_placeholder || VitalsImage::Base::TINY_GIF
-        VitalsImage.require_alt_attribute           = app.config.vitals_image.require_alt_attribute || false
+        VitalsImage.mobile_width               = app.config.vitals_image.mobile_width               || :original
+        VitalsImage.desktop_width              = app.config.vitals_image.desktop_width              || :original
+        VitalsImage.resolution                 = app.config.vitals_image.resolution                 || 2
+        VitalsImage.lazy_loading               = app.config.vitals_image.lazy_loading               || :native
+        VitalsImage.lazy_loading_placeholder   = app.config.vitals_image.lazy_loading_placeholder   || VitalsImage::Base::TINY_GIF
+        VitalsImage.require_alt_attribute      = app.config.vitals_image.require_alt_attribute      || false
 
-        VitalsImage.replace_active_storage_analyzer = app.config.vitals_image.replace_active_storage_analyzer || false
-        VitalsImage.check_for_white_background      = app.config.vitals_image.check_for_white_background || false
+        VitalsImage.check_for_white_background = app.config.vitals_image.check_for_white_background || false
 
-        VitalsImage.convert_to_jpeg                 = app.config.vitals_image.convert_to_jpeg || false
-        VitalsImage.jpeg_conversion                 = app.config.vitals_image.jpeg_conversion || { sampling_factor: "4:2:0", strip: true, interlace: "JPEG", colorspace: "sRGB", quality: 80, format: "jpg", background: :white, flatten: true, alpha: :off }
-        VitalsImage.jpeg_optimization               = app.config.vitals_image.jpeg_optimization || { sampling_factor: "4:2:0", strip: true, interlace: "JPEG", colorspace: "sRGB", quality: 80 }
-        VitalsImage.png_optimization                = app.config.vitals_image.png_optimization || { strip: true, quality: 00 }
-        VitalsImage.active_storage_route            = app.config.vitals_image.png_optimization || :inherited
+        VitalsImage.convert_to_jpeg            = app.config.vitals_image.convert_to_jpeg            || false
+        VitalsImage.jpeg_conversion            = app.config.vitals_image.jpeg_conversion            || { sampling_factor: "4:2:0", strip: true, interlace: "JPEG", colorspace: "sRGB", quality: 80, optimize_coding: true, trellis_quant: true, optimize_scans: true, quant_table: 3, format: "jpg", background: :white, flatten: true, alpha: :off }
+        VitalsImage.jpeg_optimization          = app.config.vitals_image.jpeg_optimization          || { sampling_factor: "4:2:0", strip: true, interlace: "JPEG", colorspace: "sRGB", quality: 80, optimize_coding: true, trellis_quant: true, optimize_scans: true, quant_table: 3 }
+        VitalsImage.png_optimization           = app.config.vitals_image.png_optimization           || { strip: true, quality: 00 }
+        VitalsImage.active_storage_route       = app.config.vitals_image.active_storage_route       || :inherited
 
-        VitalsImage.skip_ssl_verification           = app.config.vitals_image.skip_ssl_verification || false
+        VitalsImage.skip_ssl_verification      = app.config.vitals_image.skip_ssl_verification      || false
       end
     end
 
-    initializer "vitals_image.core_extensions" do
+    initializer "vitals_image.analyzers" do
       require_relative "analyzer/image_analyzer"
 
       config.after_initialize do |app|
         if VitalsImage.check_for_white_background
           app.config.active_storage.analyzers.prepend Analyzer::ImageAnalyzer
+        end
+      end
+    end
+
+    initializer "vitals_image.optimizations" do
+      config.after_initialize do |app|
+        if VitalsImage.image_library == :mini_magick
+
         end
       end
     end
