@@ -135,15 +135,28 @@ The following configuration options are available. The defaults were chosen for 
 | png_optimization                | see below      | see below               | Hash of options to pass to active storage when optimizing a PNG. |
 | active_storage_route            | `:inherited`   | `:inherited`            | Defines how urls of active storage images will be generated. If `inherited` it will use the same as active storage. Other valid options are `redirect`, `proxy` and `public`. Whatever is set here can be overriden in the helper. |
 
+Minimagick
 ```ruby
 # jpeg_conversion
-{ sampling_factor: "4:2:0", strip: true, interlace: "JPEG", colorspace: "sRGB", quality: 85, format: "jpg", background: :white, flatten: true, alpha: :off }
+{ saver: { strip: true, quality: 85, interlace: "JPEG", sampling_factor: "4:2:0", colorspace: "sRGB", background: :white, flatten: true, alpha: :off }, format: "jpg" }
 
 # jpeg_optimization:
-{ sampling_factor: "4:2:0", strip: true, interlace: "JPEG", colorspace: "sRGB", quality: 85 }
+{ saver: { strip: true, quality: 85, interlace: "JPEG", sampling_factor: "4:2:0", colorspace: "sRGB" } }
 
 # png_optimization:
-{ strip: true, quality: 00 }
+{ saver: { strip: true, quality: 00 } }
+```
+
+Vips
+```ruby
+# jpeg_conversion
+{ saver: { strip: true, quality: 85, interlace: true, optimize_coding: true, trellis_quant: true, quant_table: 3, background: 255 }, format: "jpg" }
+
+# jpeg_optimization:
+{ saver: { strip: true, quality: 85, interlace: true, optimize_coding: true, trellis_quant: true, quant_table: 3 } }
+
+# png_optimization:
+{ saver: { strip: true, compression: 9 } }
 ```
 
 These can be configured in your environment files, just like any other rails settings:
