@@ -50,7 +50,7 @@ module VitalsImage
       end
 
       def resize_mode
-        @options[:resize_mode] || @source.metadata["isolated"] ? :resize_and_pad : :resize_to_fill
+        @options[:resize_mode] || @source.metadata["white_background"] ? :resize_and_pad : :resize_to_fill
       end
 
       def variant
@@ -65,23 +65,32 @@ module VitalsImage
       end
 
       def optimize_jpeg
-        @source.variant VitalsImage.jpeg_optimization.merge("#{resize_mode}": dimensions)
+        @source.variant optimizations_with_optimal_quality(VitalsImage.jpeg_optimization)
       end
 
       def optimize_png
         if alpha? || !VitalsImage.convert_to_jpeg
-          @source.variant VitalsImage.png_optimization.merge("#{resize_mode}": dimensions)
+          @source.variant optimizations(VitalsImage.png_optimization)
         else
-          @source.variant VitalsImage.jpeg_conversion.merge("#{resize_mode}": dimensions)
+          @source.variant optimizations_with_optimal_quality(VitalsImage.jpeg_conversion)
         end
       end
 
       def optimize_generic
         if alpha? || !VitalsImage.convert_to_jpeg
-          @source.variant("#{resize_mode}": dimensions)
+          @source.variant optimizations
         else
-          @source.variant VitalsImage.jpeg_conversion.merge("#{resize_mode}": dimensions)
+          @source.variant optimizations_with_optimal_quality(VitalsImage.jpeg_conversion)
         end
+      end
+
+      def optimizations_with_optimal_quality(defaults = {})
+        quality = @source.metadata[:optimal_quality] || defaults[:saver][:quality]
+        defaults.merge quality: quality, "#{resize_mode}": dimensions
+      end
+
+      def optimizations(defaults = {})
+        defaults.merge "#{resize_mode}": dimensions
       end
   end
 end

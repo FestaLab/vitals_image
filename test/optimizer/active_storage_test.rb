@@ -130,7 +130,7 @@ module VitalsImage
     end
 
     test "that a height and width can be chosen for an existing image of an object in a white background and it will be padded" do
-      existing_jpeg_with_dimensions(150, 150, isolated: true) do |image|
+      existing_jpeg_with_dimensions(150, 150, white_background: true) do |image|
         assert_equal [300, 300], image.src.variation.transformations[:resize_and_pad]
       end
     end
@@ -138,6 +138,16 @@ module VitalsImage
     test "that optimizer will not attempt to upscale the image to match specified width and resolution" do
       existing_jpeg_with_dimensions(1000, nil) do |image|
         assert_equal [1401, 2102], image.src.variation.transformations[:resize_to_fill]
+      end
+    end
+
+    test "that optimizer uses optimal image matadata if available" do
+      existing_jpeg_with_dimensions(1000, nil) do |image|
+        assert_equal 85, image.src.variation.transformations[:quality]
+      end
+
+      existing_jpeg_with_dimensions(1000, nil, optimal_quality: 50) do |image|
+        assert_equal 50, image.src.variation.transformations[:quality]
       end
     end
 
@@ -207,8 +217,8 @@ module VitalsImage
         yield VitalsImage::Optimizer::ActiveStorage.new(blob, width: width, height: height), blob
       end
 
-      def existing_jpeg_with_dimensions(width, height, isolated: false)
-        blob = create_file_blob(filename: "dog.jpg", content_type: "image/jpg", metadata: { analyzed: true, width: 1401, height: 2102, isolated: isolated })
+      def existing_jpeg_with_dimensions(width, height, white_background: false, optimal_quality: nil)
+        blob = create_file_blob(filename: "dog.jpg", content_type: "image/jpg", metadata: { analyzed: true, width: 1401, height: 2102, white_background: white_background, optimal_quality: optimal_quality })
         yield VitalsImage::Optimizer::ActiveStorage.new(blob, width: width, height: height)
       end
 

@@ -95,7 +95,7 @@ For an image from an url, which it cannot apply transformations to, it will use 
 For an active storage image, it has two possible strategies for the resize:
 
 - `resize_to_limit`: This is the default. Downsizes the image to fit within the specified dimensions while retaining the original aspect ratio. Will only resize the image if it's larger than the specified dimensions.
-- `resize_and_pad`: This only be used if Vitals Image know that this image is an object in a white background. For that to work you must set `image_library = :vips` and `check_for_white_background = true` in your configuration. This will cause Vitals Image to replace the normal `analyze_job` that Active Storage uses, with a custom one that will add the attribute `isolated` to the blobs metadata,  
+- `resize_and_pad`: This only be used if Vitals Image know that this image is an object in a white background. For that to work you must set `image_library = :vips` and `check_for_white_background = true` in your configuration. This will cause Vitals Image to replace the normal `analyze_job` that Active Storage uses, with a custom one that will add the attribute `white_background` to the blobs metadata,  
 
 ### Advanced options
 You can disable lazy loading if you want:
@@ -137,10 +137,10 @@ The following configuration options are available. The defaults were chosen for 
 
 ```ruby
 # jpeg_conversion
-{ sampling_factor: "4:2:0", strip: true, interlace: "JPEG", colorspace: "sRGB", quality: 80, format: "jpg", background: :white, flatten: true, alpha: :off }
+{ sampling_factor: "4:2:0", strip: true, interlace: "JPEG", colorspace: "sRGB", quality: 85, format: "jpg", background: :white, flatten: true, alpha: :off }
 
 # jpeg_optimization:
-{ sampling_factor: "4:2:0", strip: true, interlace: "JPEG", colorspace: "sRGB", quality: 80 }
+{ sampling_factor: "4:2:0", strip: true, interlace: "JPEG", colorspace: "sRGB", quality: 85 }
 
 # png_optimization:
 { strip: true, quality: 00 }
