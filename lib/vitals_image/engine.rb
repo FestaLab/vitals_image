@@ -9,6 +9,7 @@ require "active_support"
 require "marcel"
 require "ruby-vips"
 require "mini_magick"
+require "active_analysis"
 
 require "vitals_image/analyzer"
 require "vitals_image/analyzer/url_analyzer"
@@ -32,10 +33,11 @@ module VitalsImage
 
     initializer "vitals_image.configs" do
       config.after_initialize do |app|
+        VitalsImage.image_library              = app.config.active_storage.variant_processor        || :mini_magick
+
         VitalsImage.logger                     = app.config.vitals_image.logger                     || Rails.logger
         VitalsImage.optimizers                 = app.config.vitals_image.optimizers                 || []
         VitalsImage.analyzers                  = app.config.vitals_image.analyzers                  || []
-        VitalsImage.image_library              = app.config.vitals_image.image_library              || :mini_magick
 
         VitalsImage.mobile_width               = app.config.vitals_image.mobile_width               || :original
         VitalsImage.desktop_width              = app.config.vitals_image.desktop_width              || :original
@@ -44,32 +46,36 @@ module VitalsImage
         VitalsImage.lazy_loading_placeholder   = app.config.vitals_image.lazy_loading_placeholder   || VitalsImage::Base::TINY_GIF
         VitalsImage.require_alt_attribute      = app.config.vitals_image.require_alt_attribute      || false
 
-        VitalsImage.check_for_white_background = app.config.vitals_image.check_for_white_background || false
+        VitalsImage.check_for_white_background = app.config.vitals_image.check_for_white_background || true
 
-        VitalsImage.convert_to_jpeg            = app.config.vitals_image.convert_to_jpeg            || false
-        VitalsImage.jpeg_conversion            = app.config.vitals_image.jpeg_conversion            || { sampling_factor: "4:2:0", strip: true, interlace: "JPEG", colorspace: "sRGB", quality: 80, optimize_coding: true, trellis_quant: true, optimize_scans: true, quant_table: 3, format: "jpg", background: :white, flatten: true, alpha: :off }
-        VitalsImage.jpeg_optimization          = app.config.vitals_image.jpeg_optimization          || { sampling_factor: "4:2:0", strip: true, interlace: "JPEG", colorspace: "sRGB", quality: 80, optimize_coding: true, trellis_quant: true, optimize_scans: true, quant_table: 3 }
-        VitalsImage.png_optimization           = app.config.vitals_image.png_optimization           || { strip: true, quality: 00 }
         VitalsImage.active_storage_route       = app.config.vitals_image.active_storage_route       || :inherited
+        VitalsImage.convert_to_jpeg            = app.config.vitals_image.convert_to_jpeg            || false
+        VitalsImage.jpeg_conversion            = app.config.vitals_image.jpeg_conversion
+        VitalsImage.jpeg_optimization          = app.config.vitals_image.jpeg_optimization
+        VitalsImage.png_optimization           = app.config.vitals_image.png_optimization
 
         VitalsImage.skip_ssl_verification      = app.config.vitals_image.skip_ssl_verification      || false
       end
     end
 
     initializer "vitals_image.analyzers" do
-      require_relative "analyzer/image_analyzer"
-
       config.after_initialize do |app|
         if VitalsImage.check_for_white_background
-          app.config.active_storage.analyzers.prepend Analyzer::ImageAnalyzer
+          app.config.active_analysis.addons << ActiveAnalysis::Addon::ImageAddon::WhiteBackground
         end
       end
     end
 
     initializer "vitals_image.optimizations" do
       config.after_initialize do |app|
-        if VitalsImage.image_library == :mini_magick
-
+        if VitalsImage.image_library == :vips
+          VitalsImage.jpeg_conversion   ||= { saver: { strip: true, quality: 85, interlace: true, optimize_coding: true, trellis_quant: true, quant_table: 3, background: 255 }, format: "jpg" }
+          VitalsImage.jpeg_optimization ||= { saver: { strip: true, quality: 85, interlace: true, optimize_coding: true, trellis_quant: true, quant_table: 3 } }
+          VitalsImage.png_optimization  ||= { saver: { strip: true, compression: 9 } }
+        else
+          VitalsImage.jpeg_conversion   ||= { saver: { strip: true, quality: 85, interlace: "JPEG", sampling_factor: "4:2:0", colorspace: "sRGB", background: :white, flatten: true, alpha: :off }, format: "jpg" }
+          VitalsImage.jpeg_optimization ||= { saver: { strip: true, quality: 85, interlace: "JPEG", sampling_factor: "4:2:0", colorspace: "sRGB" } }
+          VitalsImage.png_optimization  ||= { saver: { strip: true, quality: 00 } }
         end
       end
     end
