@@ -1,6 +1,9 @@
 ## [Unreleased]
 
-- Use the correct source for invariable images
+## [0.3.0] - 2021-05-22
+
+- Redo the image helper
+- Redo the active storage optimizer 
 
 ## [0.2.1] - 2021-05-22
 
