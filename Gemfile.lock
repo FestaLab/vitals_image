@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    vitals_image (0.2.1)
+    vitals_image (0.3.0)
       active_analysis (>= 0.3)
       activejob (>= 6.1)
       activemodel (>= 6.1)

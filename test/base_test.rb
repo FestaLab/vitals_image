@@ -11,14 +11,16 @@ module VitalsImage
       assert VitalsImage::Base.optimizer("http://www.example.com").is_a?(VitalsImage::Optimizer::Url)
       assert VitalsImage::Base.optimizer("https://festalab-fixtures.s3.amazonaws.com/cat.jpg").is_a?(VitalsImage::Optimizer::Url)
 
-      assert VitalsImage::Base.optimizer(ActiveStorage::Attachment.new).is_a?(VitalsImage::Optimizer::ActiveStorage)
-      assert VitalsImage::Base.optimizer(ActiveStorage::Attached.new(nil, nil)).is_a?(VitalsImage::Optimizer::ActiveStorage)
-      assert VitalsImage::Base.optimizer(ActiveStorage::Blob.new).is_a?(VitalsImage::Optimizer::ActiveStorage)
+      blob = create_file_blob(filename: "dog.jpg", content_type: "image/jpg", metadata: { analyzed: true, width: 100, height: 100 })
+      assert VitalsImage::Base.optimizer(blob).is_a?(VitalsImage::Optimizer::Variable)
+
+      blob = create_file_blob(filename: "icon.svg", content_type: "image/svg+xml", metadata: { analyzed: true, width: 100, height: 100 })
+      assert VitalsImage::Base.optimizer(blob).is_a?(VitalsImage::Optimizer::Invariable)
     end
 
     test "that an exception is raised if no optimizers are available for the specified source" do
       assert_raise VitalsImage::UnoptimizableError do
-        VitalsImage::Base.optimizer("/some-asset.svg")
+        VitalsImage::Base.optimizer("/some-asset.pdf")
       end
     end
 

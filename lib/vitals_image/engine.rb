@@ -19,14 +19,15 @@ require "vitals_image/errors"
 require "vitals_image/optimizer"
 require "vitals_image/optimizer/blank"
 require "vitals_image/optimizer/url"
-require "vitals_image/optimizer/active_storage"
+require "vitals_image/optimizer/variable"
+require "vitals_image/optimizer/invariable"
 
 module VitalsImage
   class Engine < ::Rails::Engine
     isolate_namespace VitalsImage
 
     config.vitals_image                                 = ActiveSupport::OrderedOptions.new
-    config.vitals_image.optimizers                      = [VitalsImage::Optimizer::Blank, VitalsImage::Optimizer::ActiveStorage, VitalsImage::Optimizer::Url]
+    config.vitals_image.optimizers                      = [VitalsImage::Optimizer::Blank, VitalsImage::Optimizer::Variable, VitalsImage::Optimizer::Invariable, VitalsImage::Optimizer::Url]
     config.vitals_image.analyzers                       = [VitalsImage::Analyzer::UrlAnalyzer]
 
     config.eager_load_namespaces << VitalsImage

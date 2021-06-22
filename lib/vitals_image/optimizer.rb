@@ -26,7 +26,7 @@ module VitalsImage
 
     def html_options
       @html_options ||= begin
-        html_options = @options.dup
+        html_options = @options.dup.except("lazy_load")
         html_options["width"]           = width
         html_options["height"]          = height
         html_options["style"]           = style
@@ -55,11 +55,6 @@ module VitalsImage
 
     def native_lazy_load?
       lazy_load? && VitalsImage.lazy_loading == :native
-    end
-
-    # Override this method in a concrete subclass. Have it return true the source is an active storage blob
-    def variable?
-      false
     end
 
     private

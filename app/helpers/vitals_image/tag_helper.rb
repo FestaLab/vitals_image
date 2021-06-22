@@ -6,32 +6,17 @@ module VitalsImage
       source = image_url(source) if source.is_a?(String)
       optimizer = VitalsImage::Base.optimizer(source, options)
 
-      if !optimizer.variable?
-        vitals_image_invariable_tag(optimizer)
-      elsif optimizer.native_lazy_load?
-        vitals_image_variable_tag(optimizer)
+      if optimizer.non_native_lazy_load?
+        url = vitals_image_url(optimizer.html_options["data"]["src"], optimizer.html_options)
+        optimizer.html_options["data"]["src"] = url
+        image_tag optimizer.src, optimizer.html_options
       else
-        vitals_image_lazy_tag(optimizer)
+        url = vitals_image_url(optimizer.src, optimizer.html_options)
+        image_tag url, optimizer.html_options
       end
     end
 
     private
-      def vitals_image_invariable_tag(optimizer)
-        image_tag optimizer.src, optimizer.html_options
-      end
-
-      def vitals_image_variable_tag(optimizer)
-        url = vitals_image_url(optimizer.src, optimizer.html_options)
-        image_tag url, optimizer.html_options
-      end
-
-      def vitals_image_lazy_tag(optimizer)
-        url = vitals_image_url(optimizer.html_options["data"]["src"], optimizer.html_options)
-        optimizer.html_options["data"]["src"] = url
-
-        image_tag optimizer.src, optimizer.html_options
-      end
-
       def vitals_image_url(source, options)
         active_storage_route = options.delete("active_storage_route") || VitalsImage.active_storage_route
 

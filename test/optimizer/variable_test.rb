@@ -3,15 +3,7 @@
 require "test_helper"
 
 module VitalsImage
-  class Optimizer::ActiveStorageTest < ActiveSupport::TestCase
-    test "that active storage sources are variable if supported" do
-      blob = create_file_blob(filename: "dog.jpg", content_type: "image/jpg", metadata: { analyzed: true, width: 1401, height: 2102 })
-      assert VitalsImage::Optimizer::ActiveStorage.new(blob).variable?
-
-      blob = create_file_blob(filename: "icon.svg", content_type: "image/svg+xml", metadata: { analyzed: true, width: 1401, height: 2102 })
-      assert_not VitalsImage::Optimizer::ActiveStorage.new(blob).variable?
-    end
-
+  class Optimizer::VariableTest < ActiveSupport::TestCase
     test "that new images are configured correctly" do
       new_jpeg_with_dimensions(nil, nil) do |image, blob|
         assert_equal blob, image.src
@@ -157,7 +149,7 @@ module VitalsImage
     test "that png image is converted" do
       with_jpeg_conversion_set_to(true) do
         blob = create_file_blob(filename: "invitation.png", content_type: "image/png", metadata: { analyzed: true, width: 800, height: 1200 })
-        image = VitalsImage::Optimizer::ActiveStorage.new(blob, width: 800)
+        image = VitalsImage::Optimizer::Variable.new(blob, width: 800)
 
         assert_equal [800, 1200], image.src.variation.transformations[:resize_to_fill]
         assert_equal "jpg", image.src.variation.transformations[:format]
@@ -167,7 +159,7 @@ module VitalsImage
     test "that png image is not converted if alpha is specified" do
       with_jpeg_conversion_set_to(true) do
         blob = create_file_blob(filename: "invitation.png", content_type: "image/png", metadata: { analyzed: true, width: 800, height: 1200 })
-        image = VitalsImage::Optimizer::ActiveStorage.new(blob, width: 800, alpha: true)
+        image = VitalsImage::Optimizer::Variable.new(blob, width: 800, alpha: true)
 
         assert_equal [800, 1200], image.src.variation.transformations[:resize_to_fill]
         assert_equal "png", image.src.variation.transformations[:format]
@@ -177,7 +169,7 @@ module VitalsImage
     test "that png image is not converted if the feature was disabled" do
       with_jpeg_conversion_set_to(false) do
         blob = create_file_blob(filename: "invitation.png", content_type: "image/png", metadata: { analyzed: true, width: 800, height: 1200 })
-        image = VitalsImage::Optimizer::ActiveStorage.new(blob, width: 800)
+        image = VitalsImage::Optimizer::Variable.new(blob, width: 800)
 
         assert_equal [800, 1200], image.src.variation.transformations[:resize_to_fill]
         assert_equal "png", image.src.variation.transformations[:format]
@@ -187,7 +179,7 @@ module VitalsImage
     test "that generic image is converted" do
       with_jpeg_conversion_set_to(true) do
         blob = create_file_blob(filename: "dog.webp", content_type: "image/webp", metadata: { analyzed: true, width: 1401, height: 2102 })
-        image = VitalsImage::Optimizer::ActiveStorage.new(blob, width: 100)
+        image = VitalsImage::Optimizer::Variable.new(blob, width: 100)
 
         assert_equal [200, 300], image.src.variation.transformations[:resize_to_fill]
         assert_equal "jpg", image.src.variation.transformations[:format]
@@ -197,7 +189,7 @@ module VitalsImage
     test "that generic image is not converted if alpha is specified" do
       with_jpeg_conversion_set_to(true) do
         blob = create_file_blob(filename: "dog.webp", content_type: "image/webp", metadata: { analyzed: true, width: 1401, height: 2102 })
-        image = VitalsImage::Optimizer::ActiveStorage.new(blob, width: 100, alpha: true)
+        image = VitalsImage::Optimizer::Variable.new(blob, width: 100, alpha: true)
 
         assert_equal [200, 300], image.src.variation.transformations[:resize_to_fill]
         assert_not_equal "jpg", image.src.variation.transformations[:format]
@@ -207,7 +199,7 @@ module VitalsImage
     test "that generic image is not converted if the feature was disabled" do
       with_jpeg_conversion_set_to(false) do
         blob = create_file_blob(filename: "dog.webp", content_type: "image/webp", metadata: { analyzed: true, width: 1401, height: 2102 })
-        image = VitalsImage::Optimizer::ActiveStorage.new(blob, width: 100)
+        image = VitalsImage::Optimizer::Variable.new(blob, width: 100)
 
         assert_equal [200, 300], image.src.variation.transformations[:resize_to_fill]
         assert_not_equal "jpg", image.src.variation.transformations[:format]
@@ -216,21 +208,18 @@ module VitalsImage
 
     test "that source that have not been analyzed are not transformed" do
       blob = create_file_blob(filename: "dog.jpg", content_type: "image/jpg", metadata: { analyzed: false })
-      assert_equal blob, VitalsImage::Optimizer::ActiveStorage.new(blob, width: 100).src
-
-      blob = create_file_blob(filename: "icon.svg", content_type: "image/svg+xml", metadata: { analyzed: true, width: 100, height: 100 })
-      assert_equal blob, VitalsImage::Optimizer::ActiveStorage.new(blob, width: 100).src
+      assert_equal blob, VitalsImage::Optimizer::Variable.new(blob, width: 100).src
     end
 
     private
       def new_jpeg_with_dimensions(width, height)
         blob = create_file_blob(filename: "cat.jpg", content_type: "image/jpg")
-        yield VitalsImage::Optimizer::ActiveStorage.new(blob, width: width, height: height), blob
+        yield VitalsImage::Optimizer::Variable.new(blob, width: width, height: height), blob
       end
 
       def existing_jpeg_with_dimensions(width, height, white_background: false, optimal_quality: nil)
         blob = create_file_blob(filename: "dog.jpg", content_type: "image/jpg", metadata: { analyzed: true, width: 1401, height: 2102, white_background: white_background, optimal_quality: optimal_quality })
-        yield VitalsImage::Optimizer::ActiveStorage.new(blob, width: width, height: height)
+        yield VitalsImage::Optimizer::Variable.new(blob, width: width, height: height)
       end
 
       def with_jpeg_conversion_set_to(value)

@@ -1,18 +1,14 @@
 # frozen_string_literal: true
 
 module VitalsImage
-  class Optimizer::ActiveStorage < Optimizer
+  class Optimizer::Variable < Optimizer
     def self.accept?(source)
-      source.is_a?(::ActiveStorage::Attached) || source.is_a?(::ActiveStorage::Attachment) || source.is_a?(::ActiveStorage::Blob)
-    end
-
-    def variable?
-      @source.variable?
+      source.respond_to?(:variable?) && source.variable?
     end
 
     private
       def source_url
-        if analyzed? && variable?
+        if analyzed?
           variant
         else
           @source

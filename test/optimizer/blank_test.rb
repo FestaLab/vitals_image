@@ -3,10 +3,6 @@
 require "test_helper"
 
 class VitalsImage::Optimizer::BlankTest < ActiveSupport::TestCase
-  test "that blank sources are not variable" do
-    assert_not VitalsImage::Optimizer::Url.new(nil).variable?
-  end
-
   test "that blank images are configured correctly" do
     with_dimensions(nil, nil) do |image|
       assert_equal VitalsImage.lazy_loading_placeholder, image.src
