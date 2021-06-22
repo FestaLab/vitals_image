@@ -214,6 +214,14 @@ module VitalsImage
       end
     end
 
+    test "that source that have not been analyzed are not transformed" do
+      blob = create_file_blob(filename: "dog.jpg", content_type: "image/jpg", metadata: { analyzed: false })
+      assert_equal blob, VitalsImage::Optimizer::ActiveStorage.new(blob, width: 100).src
+
+      blob = create_file_blob(filename: "icon.svg", content_type: "image/svg+xml", metadata: { analyzed: true, width: 100, height: 100 })
+      assert_equal blob, VitalsImage::Optimizer::ActiveStorage.new(blob, width: 100).src
+    end
+
     private
       def new_jpeg_with_dimensions(width, height)
         blob = create_file_blob(filename: "cat.jpg", content_type: "image/jpg")

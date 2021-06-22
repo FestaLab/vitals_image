@@ -1,5 +1,7 @@
 ## [Unreleased]
 
+- Use the correct source for invariable images
+
 ## [0.2.1] - 2021-05-22
 
 - Do not attempt to transform invariable images

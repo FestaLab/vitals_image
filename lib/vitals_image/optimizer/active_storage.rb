@@ -12,7 +12,7 @@ module VitalsImage
 
     private
       def source_url
-        if analyzed?
+        if analyzed? && variable?
           variant
         else
           @source
