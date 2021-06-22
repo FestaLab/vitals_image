@@ -4,9 +4,12 @@ require "test_helper"
 
 module VitalsImage
   class Optimizer::ActiveStorageTest < ActiveSupport::TestCase
-    test "that url sources are not variable" do
+    test "that active storage sources are variable if supported" do
       blob = create_file_blob(filename: "dog.jpg", content_type: "image/jpg", metadata: { analyzed: true, width: 1401, height: 2102 })
       assert VitalsImage::Optimizer::ActiveStorage.new(blob).variable?
+
+      blob = create_file_blob(filename: "icon.svg", content_type: "image/svg+xml", metadata: { analyzed: true, width: 1401, height: 2102 })
+      assert_not VitalsImage::Optimizer::ActiveStorage.new(blob).variable?
     end
 
     test "that new images are configured correctly" do

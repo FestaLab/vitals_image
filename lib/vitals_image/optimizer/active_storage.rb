@@ -7,7 +7,7 @@ module VitalsImage
     end
 
     def variable?
-      true
+      @source.variable?
     end
 
     private

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    vitals_image (0.2.0)
+    vitals_image (0.2.1)
       active_analysis (>= 0.3)
       activejob (>= 6.1)
       activemodel (>= 6.1)
@@ -163,7 +163,7 @@ GEM
     rubocop-performance (1.11.3)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
-    rubocop-rails (2.10.1)
+    rubocop-rails (2.11.0)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.7.0, < 2.0)
