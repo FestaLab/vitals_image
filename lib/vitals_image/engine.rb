@@ -70,13 +70,13 @@ module VitalsImage
     initializer "vitals_image.optimizations" do
       config.after_initialize do |app|
         if VitalsImage.image_library == :vips
-          VitalsImage.jpeg_conversion   ||= { saver: { strip: true, quality: 85, interlace: true, optimize_coding: true, trellis_quant: true, quant_table: 3, background: 255 }, format: "jpg" }
-          VitalsImage.jpeg_optimization ||= { saver: { strip: true, quality: 85, interlace: true, optimize_coding: true, trellis_quant: true, quant_table: 3 } }
+          VitalsImage.jpeg_conversion   ||= { saver: { strip: true, quality: 80, interlace: true, optimize_coding: true, trellis_quant: true, quant_table: 3, background: 255 }, format: "jpg" }
+          VitalsImage.jpeg_optimization ||= { saver: { strip: true, quality: 80, interlace: true, optimize_coding: true, trellis_quant: true, quant_table: 3 } }
           VitalsImage.png_optimization  ||= { saver: { strip: true, compression: 9 } }
         else
-          VitalsImage.jpeg_conversion   ||= { saver: { strip: true, quality: 85, interlace: "JPEG", sampling_factor: "4:2:0", colorspace: "sRGB", background: :white, flatten: true, alpha: :off }, format: "jpg" }
-          VitalsImage.jpeg_optimization ||= { saver: { strip: true, quality: 85, interlace: "JPEG", sampling_factor: "4:2:0", colorspace: "sRGB" } }
-          VitalsImage.png_optimization  ||= { saver: { strip: true, quality: 00 } }
+          VitalsImage.jpeg_conversion   ||= { saver: { strip: true, quality: 80, interlace: "JPEG", sampling_factor: "4:2:0", colorspace: "sRGB", background: :white, flatten: true, alpha: :off }, format: "jpg" }
+          VitalsImage.jpeg_optimization ||= { saver: { strip: true, quality: 80, interlace: "JPEG", sampling_factor: "4:2:0", colorspace: "sRGB" } }
+          VitalsImage.png_optimization  ||= { saver: { strip: true, quality: 75 } }
         end
       end
     end
