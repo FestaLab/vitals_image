@@ -82,7 +82,7 @@ module VitalsImage
 
       def optimizations_with_optimal_quality(defaults = {})
         quality = @source.metadata[:optimal_quality] || defaults[:saver][:quality]
-        defaults.merge quality: quality, "#{resize_mode}": dimensions
+        defaults.deep_merge "#{resize_mode}": dimensions, saver: { quality: quality }
       end
 
       def optimizations(defaults = {})

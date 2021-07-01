@@ -138,11 +138,11 @@ module VitalsImage
 
     test "that optimizer uses optimal image matadata if available" do
       existing_jpeg_with_dimensions(1000, nil) do |image|
-        assert_equal 80, image.src.variation.transformations[:quality]
+        assert_equal 80, image.src.variation.transformations[:saver][:quality]
       end
 
       existing_jpeg_with_dimensions(1000, nil, optimal_quality: 50) do |image|
-        assert_equal 50, image.src.variation.transformations[:quality]
+        assert_equal 50, image.src.variation.transformations[:saver][:quality]
       end
     end
 
