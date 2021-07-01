@@ -50,43 +50,15 @@ module VitalsImage
       end
 
       def variant
-        case (@source.content_type)
-        when /jpg|jpeg/
-          optimize_jpeg
-        when /png/
-          optimize_png
-        else
-          optimize_generic
-        end
-      end
+        format  = @source.content_type.split("/").last.to_sym
+        optimal = @source.metadata[:optimal_quality]
+        library = VitalsImage.image_library
 
-      def optimize_jpeg
-        @source.variant optimizations_with_optimal_quality(VitalsImage.jpeg_optimization)
-      end
+        transformations = VitalsImage.transformations[format][library] || { saver: {} }
+        transformations["#{resize_mode}"] = dimensions
+        transformations[:saver][:quality] = optimal if optimal
 
-      def optimize_png
-        if alpha? || !VitalsImage.convert_to_jpeg
-          @source.variant optimizations(VitalsImage.png_optimization)
-        else
-          @source.variant optimizations_with_optimal_quality(VitalsImage.jpeg_conversion)
-        end
-      end
-
-      def optimize_generic
-        if alpha? || !VitalsImage.convert_to_jpeg
-          @source.variant optimizations
-        else
-          @source.variant optimizations_with_optimal_quality(VitalsImage.jpeg_conversion)
-        end
-      end
-
-      def optimizations_with_optimal_quality(defaults = {})
-        quality = @source.metadata[:optimal_quality] || defaults[:saver][:quality]
-        defaults.merge quality: quality, "#{resize_mode}": dimensions
-      end
-
-      def optimizations(defaults = {})
-        defaults.merge "#{resize_mode}": dimensions
+        @source.variant(transformations)
       end
   end
 end

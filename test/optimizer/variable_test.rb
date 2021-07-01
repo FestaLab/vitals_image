@@ -138,71 +138,11 @@ module VitalsImage
 
     test "that optimizer uses optimal image matadata if available" do
       existing_jpeg_with_dimensions(1000, nil) do |image|
-        assert_equal 80, image.src.variation.transformations[:quality]
+        assert_equal 80, image.src.variation.transformations[:saver][:quality]
       end
 
       existing_jpeg_with_dimensions(1000, nil, optimal_quality: 50) do |image|
-        assert_equal 50, image.src.variation.transformations[:quality]
-      end
-    end
-
-    test "that png image is converted" do
-      with_jpeg_conversion_set_to(true) do
-        blob = create_file_blob(filename: "invitation.png", content_type: "image/png", metadata: { analyzed: true, width: 800, height: 1200 })
-        image = VitalsImage::Optimizer::Variable.new(blob, width: 800)
-
-        assert_equal [800, 1200], image.src.variation.transformations[:resize_to_fill]
-        assert_equal "jpg", image.src.variation.transformations[:format]
-      end
-    end
-
-    test "that png image is not converted if alpha is specified" do
-      with_jpeg_conversion_set_to(true) do
-        blob = create_file_blob(filename: "invitation.png", content_type: "image/png", metadata: { analyzed: true, width: 800, height: 1200 })
-        image = VitalsImage::Optimizer::Variable.new(blob, width: 800, alpha: true)
-
-        assert_equal [800, 1200], image.src.variation.transformations[:resize_to_fill]
-        assert_equal "png", image.src.variation.transformations[:format]
-      end
-    end
-
-    test "that png image is not converted if the feature was disabled" do
-      with_jpeg_conversion_set_to(false) do
-        blob = create_file_blob(filename: "invitation.png", content_type: "image/png", metadata: { analyzed: true, width: 800, height: 1200 })
-        image = VitalsImage::Optimizer::Variable.new(blob, width: 800)
-
-        assert_equal [800, 1200], image.src.variation.transformations[:resize_to_fill]
-        assert_equal "png", image.src.variation.transformations[:format]
-      end
-    end
-
-    test "that generic image is converted" do
-      with_jpeg_conversion_set_to(true) do
-        blob = create_file_blob(filename: "dog.webp", content_type: "image/webp", metadata: { analyzed: true, width: 1401, height: 2102 })
-        image = VitalsImage::Optimizer::Variable.new(blob, width: 100)
-
-        assert_equal [200, 300], image.src.variation.transformations[:resize_to_fill]
-        assert_equal "jpg", image.src.variation.transformations[:format]
-      end
-    end
-
-    test "that generic image is not converted if alpha is specified" do
-      with_jpeg_conversion_set_to(true) do
-        blob = create_file_blob(filename: "dog.webp", content_type: "image/webp", metadata: { analyzed: true, width: 1401, height: 2102 })
-        image = VitalsImage::Optimizer::Variable.new(blob, width: 100, alpha: true)
-
-        assert_equal [200, 300], image.src.variation.transformations[:resize_to_fill]
-        assert_not_equal "jpg", image.src.variation.transformations[:format]
-      end
-    end
-
-    test "that generic image is not converted if the feature was disabled" do
-      with_jpeg_conversion_set_to(false) do
-        blob = create_file_blob(filename: "dog.webp", content_type: "image/webp", metadata: { analyzed: true, width: 1401, height: 2102 })
-        image = VitalsImage::Optimizer::Variable.new(blob, width: 100)
-
-        assert_equal [200, 300], image.src.variation.transformations[:resize_to_fill]
-        assert_not_equal "jpg", image.src.variation.transformations[:format]
+        assert_equal 50, image.src.variation.transformations[:saver][:quality]
       end
     end
 
@@ -220,15 +160,6 @@ module VitalsImage
       def existing_jpeg_with_dimensions(width, height, white_background: false, optimal_quality: nil)
         blob = create_file_blob(filename: "dog.jpg", content_type: "image/jpg", metadata: { analyzed: true, width: 1401, height: 2102, white_background: white_background, optimal_quality: optimal_quality })
         yield VitalsImage::Optimizer::Variable.new(blob, width: width, height: height)
-      end
-
-      def with_jpeg_conversion_set_to(value)
-        previous_option = VitalsImage.convert_to_jpeg
-        VitalsImage.convert_to_jpeg = value
-
-        yield
-      ensure
-        VitalsImage.convert_to_jpeg = previous_option
       end
   end
 end

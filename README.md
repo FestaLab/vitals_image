@@ -127,36 +127,32 @@ The following configuration options are available. The defaults were chosen for 
 | resolution                      | `2`            | `2`                     | The resolution that downsized images will have. While some phones are capable of `3` or `4`, `2` should be [good enough for most people](https://blog.twitter.com/engineering/en_us/topics/infrastructure/2019/capping-image-fidelity-on-ultra-high-resolution-devices.html) |
 | lazy_loading                    | `:native`      | `:lozad` or `:lazyload` | If left at `:native`, the tags `loading` and `decoding` will be added. Otherwise, the value of this option will be added to the `class` attribute and `src` moved to `data-src`. I recommend either [lozad](https://apoorv.pro/lozad.js/) or [lazysizes](https://github.com/aFarkas/lazysizes)
 | lazy_loading_placeholder        | Blank GIF      | Blank GIF               | When using a lazy load library, this image will be used as the placeholder in the `src` attribute so that users don't see a broken image. See it [here](https://github.com/FestaLab/vitals_image/blob/main/lib/vitals_image/engine.rb#L36). |
-| require_alt_attribute           | `false`        | `true`                  | Will raise in exception if the `alt` attribute is not supplied to the helper. Useful to ensure no one ever forgets it again. |
 | check_for_white_background      | `false`        | `true`                  | Requires `image_library = :vips`. Same as above, but the analyzer will also try to deduce if the image is a photo, or a product on a white background. This will help define if `resize_to_limit` or `resize_and_pad` should be used when you supply both `width` and `height` to the helper. |
-| convert_to_jpeg                 | `false`        | `true`                  | If set to `true`, images will be converted to JPEG, unless the keyword `alpha: true` was used in the helper. |
-| jpeg_conversion                 | see below      | see below               | Hash of options to pass to active storage when converting other image formats to JPEG and optimizing. |
-| jpeg_optimization               | see below      | see below               | Hash of options to pass to active storage when optimizing a JPEG. |
-| png_optimization                | see below      | see below               | Hash of options to pass to active storage when optimizing a PNG. |
 | active_storage_route            | `:inherited`   | `:inherited`            | Defines how urls of active storage images will be generated. If `inherited` it will use the same as active storage. Other valid options are `redirect`, `proxy` and `public`. Whatever is set here can be overriden in the helper. |
+| transformations                 | See below      | See below               | The hash of transformations that will be applied to the images. See the full values below |
 
 Minimagick
 ```ruby
-# jpeg_conversion
-{ saver: { strip: true, quality: 85, interlace: "JPEG", sampling_factor: "4:2:0", colorspace: "sRGB", background: :white, flatten: true, alpha: :off }, format: "jpg" }
+# jpeg
+{ saver: { strip: true, quality: 80, interlace: "JPEG", sampling_factor: "4:2:0", colorspace: "sRGB" } }
 
-# jpeg_optimization:
-{ saver: { strip: true, quality: 85, interlace: "JPEG", sampling_factor: "4:2:0", colorspace: "sRGB" } }
+# png:
+{ saver: { strip: true, quality: 75 } }
 
-# png_optimization:
-{ saver: { strip: true, quality: 00 } }
+# webp
+{ saver: { strip: true, quality: 75, define: { webp: { lossless: false, alpha_quality: 85, thread_level: 1 } } } }
 ```
 
 Vips
 ```ruby
-# jpeg_conversion
-{ saver: { strip: true, quality: 85, interlace: true, optimize_coding: true, trellis_quant: true, quant_table: 3, background: 255 }, format: "jpg" }
+# jpeg
+{ saver: { strip: true, quality: 80, interlace: true, optimize_scans: true, optimize_coding: true, trellis_quant: true, quant_table: 3, overshoot_deringing: true } }
 
-# jpeg_optimization:
-{ saver: { strip: true, quality: 85, interlace: true, optimize_coding: true, trellis_quant: true, quant_table: 3 } }
+# png
+{ saver: { strip: true, compression: 6 } }
 
-# png_optimization:
-{ saver: { strip: true, compression: 9 } }
+# webp
+{ saver: { strip: true, quality: 75, lossless: false, alpha_q: 85, reduction_effort: 6, smart_subsample: true } }
 ```
 
 These can be configured in your environment files, just like any other rails settings:
@@ -164,16 +160,13 @@ These can be configured in your environment files, just like any other rails set
 ```
 Rails.application.configure do |config|
   config.vitals_image.image_library = :vips
-  config.vitals_image.mobile_width = 410
-  config.vitals_image.desktop_width = 1264
   config.vitals_image.lazy_loading = :lozad
-  config.vitals_image.require_alt_attribute = true
   config.vitals_image.check_for_white_background = true
-  config.vitals_image.convert_to_jpeg = true
+  config.vitals_image.transformations[:jpeg] = { vips: { saver: { quality: 90 } } }
 end
 ```
 
-Heads up! If you are already on Rails 7.0.0.alpha, make sure you are not using  `image_decoding` and `image_loading` config options below, as they will forcibly add native lazy loading and async decoding to the tags.
+Heads up! If you are already on Rails 7.0.0.alpha, make sure you are not using  `image_decoding` and `image_loading` config options, as they will forcibly add native lazy loading and async decoding to the tags.
 
 ### Customization
 If your use case requires it, you can easily add extra `optimizers` and `analyzers`, just like you would in Active Storage. Start by inheriting the abstract classes.

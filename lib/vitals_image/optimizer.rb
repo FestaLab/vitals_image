@@ -12,8 +12,6 @@ module VitalsImage
     def initialize(source, options = {})
       @source = source
       @options = options.deep_stringify_keys
-
-      raise ArgumentError, "You must specify an alt for your image" if @options["alt"].blank? && VitalsImage.require_alt_attribute
     end
 
     def src
