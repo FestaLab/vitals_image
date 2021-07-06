@@ -82,13 +82,11 @@ module VitalsImage
 
       def resize_and_flatten(defaults = {})
         resize  = resize_mode != :resize_and_pad ? dimensions : dimensions.push(background: [255])
-        defaults[resize_mode] = resize
-        defaults
+        defaults.merge "#{resize_mode}": resize
       end
 
       def resize(defaults = {})
-        defaults[resize_mode] = dimensions
-        defaults
+        defaults.merge "#{resize_mode}": dimensions
       end
   end
 end
