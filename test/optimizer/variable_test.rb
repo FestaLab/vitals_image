@@ -136,16 +136,6 @@ module VitalsImage
       end
     end
 
-    test "that optimizer uses optimal image matadata if available" do
-      existing_jpeg_with_dimensions(1000, nil) do |image|
-        assert_equal 80, image.src.variation.transformations[:saver][:quality]
-      end
-
-      existing_jpeg_with_dimensions(1000, nil, optimal_quality: 50) do |image|
-        assert_equal 50, image.src.variation.transformations[:saver][:quality]
-      end
-    end
-
     test "that png image is converted" do
       with_jpeg_conversion_set_to(true) do
         blob = create_file_blob(filename: "invitation.png", content_type: "image/png", metadata: { analyzed: true, width: 800, height: 1200 })
@@ -217,8 +207,8 @@ module VitalsImage
         yield VitalsImage::Optimizer::Variable.new(blob, width: width, height: height), blob
       end
 
-      def existing_jpeg_with_dimensions(width, height, white_background: false, optimal_quality: nil)
-        blob = create_file_blob(filename: "dog.jpg", content_type: "image/jpg", metadata: { analyzed: true, width: 1401, height: 2102, white_background: white_background, optimal_quality: optimal_quality })
+      def existing_jpeg_with_dimensions(width, height, white_background: false)
+        blob = create_file_blob(filename: "dog.jpg", content_type: "image/jpg", metadata: { analyzed: true, width: 1401, height: 2102, white_background: white_background })
         yield VitalsImage::Optimizer::Variable.new(blob, width: width, height: height)
       end
 

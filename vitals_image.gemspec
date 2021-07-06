@@ -32,7 +32,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "mini_magick",     ">= 4.1"
   spec.add_dependency "ruby-vips",       ">= 2.0"
   spec.add_dependency "platform_agent",  ">= 1.0"
-  spec.add_dependency "active_analysis", ">= 0.3"
+  spec.add_dependency "active_analysis", ">= 0.5"
 
   spec.add_development_dependency "sqlite3",             "~> 1.4"
   spec.add_development_dependency "byebug",              "~> 11.1"

@@ -1,5 +1,13 @@
 ## [Unreleased]
 
+## [0.4.0] - 2021-07-06
+
+- Fixed resize and pad in vips
+- Fixed image quality in vips
+- Reduced JPEG quality from 85 to 80
+- Removed optimal quality
+- Updated Vitals Image to 0.5
+
 ## [0.3.0] - 2021-05-22
 
 - Redo the image helper
