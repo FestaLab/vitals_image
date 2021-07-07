@@ -61,33 +61,31 @@ module VitalsImage
       end
 
       def optimize_jpeg
-        @source.variant optimizations_with_optimal_quality(VitalsImage.jpeg_optimization)
+        @source.variant resize_and_flatten(VitalsImage.jpeg_optimization)
       end
 
       def optimize_png
         if alpha? || !VitalsImage.convert_to_jpeg
-          @source.variant optimizations(VitalsImage.png_optimization)
+          @source.variant resize(VitalsImage.png_optimization)
         else
-          @source.variant optimizations_with_optimal_quality(VitalsImage.jpeg_conversion)
+          @source.variant resize_and_flatten(VitalsImage.jpeg_conversion)
         end
       end
 
       def optimize_generic
         if alpha? || !VitalsImage.convert_to_jpeg
-          @source.variant optimizations
+          @source.variant resize
         else
-          @source.variant optimizations_with_optimal_quality(VitalsImage.jpeg_conversion)
+          @source.variant resize_and_flatten(VitalsImage.jpeg_conversion)
         end
       end
 
-      def optimizations_with_optimal_quality(defaults = {})
-        quality = @source.metadata[:optimal_quality] || defaults[:saver][:quality]
+      def resize_and_flatten(defaults = {})
         resize  = resize_mode != :resize_and_pad ? dimensions : dimensions.push(background: [255])
-
-        defaults.deep_merge "#{resize_mode}": resize, saver: { quality: quality }
+        defaults.merge "#{resize_mode}": resize
       end
 
-      def optimizations(defaults = {})
+      def resize(defaults = {})
         defaults.merge "#{resize_mode}": dimensions
       end
   end

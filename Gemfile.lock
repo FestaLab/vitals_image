@@ -1,8 +1,8 @@
 PATH
   remote: .
   specs:
-    vitals_image (0.3.0)
-      active_analysis (>= 0.3)
+    vitals_image (0.4.0)
+      active_analysis (>= 0.5)
       activejob (>= 6.1)
       activemodel (>= 6.1)
       activerecord (>= 6.1)
@@ -53,7 +53,7 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
-    active_analysis (0.3.1)
+    active_analysis (0.5.0)
       activestorage (>= 6.0)
       activesupport (>= 6.0)
       image_processing (>= 1.2)
