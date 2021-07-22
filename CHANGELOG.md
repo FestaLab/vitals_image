@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.4.1] - 2021-07-22
+
+- Do not discard the specified `style` attribute
+
 ## [0.4.0] - 2021-07-06
 
 - Fixed resize and pad in vips
