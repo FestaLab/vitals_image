@@ -149,15 +149,27 @@ module VitalsImage
       end
     end
 
-    private
-      def new_source_with_dimensions(width, height)
-        url = vitals_image_sources(:cat).key
-        yield VitalsImage::Optimizer::Url.new(url, width: width, height: height)
+    test "that style is not discarded" do
+      new_source_with_dimensions(150, 150, style: "background: #FFF;") do |image|
+        opts = image.html_options
+        assert_equal "background: #FFF;", opts["style"]
       end
 
-      def existing_source_with_dimensions(width, height)
+      existing_source_with_dimensions(150, 150, style: "background: #FFF;") do |image|
+        opts = image.html_options
+        assert_equal "object-fit: contain; background: #FFF;", opts["style"]
+      end
+    end
+
+    private
+      def new_source_with_dimensions(width, height, style: nil)
+        url = vitals_image_sources(:cat).key
+        yield VitalsImage::Optimizer::Url.new(url, width: width, height: height, style: style)
+      end
+
+      def existing_source_with_dimensions(width, height, style: nil)
         url = vitals_image_sources(:dog).key
-        yield VitalsImage::Optimizer::Url.new(url, width: width, height: height)
+        yield VitalsImage::Optimizer::Url.new(url, width: width, height: height, style: style)
       end
 
       def with_non_native_lazy_loading(klass = nil, data = nil)

@@ -29,7 +29,7 @@ module VitalsImage
         html_options = @options.dup.except("lazy_load")
         html_options["width"]           = width
         html_options["height"]          = height
-        html_options["style"]           = style
+        html_options["style"]           = "#{style} #{html_options["style"]}".squish.presence
         html_options["class"]           = "vitals-image #{html_options["class"]}".squish
 
         if non_native_lazy_load?
