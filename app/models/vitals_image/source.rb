@@ -2,8 +2,8 @@
 
 module VitalsImage
   class Source < ActiveRecord::Base
-    store :metadata, accessors: [ :analyzed, :width, :height ], coder: ActiveRecord::Coders::JSON, default: "{ analyzed: false }"
+    store :metadata, accessors: [ :identified, :analyzed, :width, :height ], coder: ActiveRecord::Coders::JSON
 
-    after_create -> { AnalyzeJob.perform_later(self) }
+    after_create_commit -> { AnalyzeJob.perform_later(self) }
   end
 end

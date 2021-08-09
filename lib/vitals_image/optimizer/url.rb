@@ -17,13 +17,17 @@ module VitalsImage
       end
 
       def style
-        if !analyzed?
+        if !identified? || !analyzed?
           # Do nothing
         elsif !requested_height
           "height:auto;"
         elsif fixed_dimensions?
           "object-fit: contain;"
         end
+      end
+
+      def identified?
+        metadata.identified
       end
 
       def analyzed?
