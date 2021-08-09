@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+## [0.5]
+
+- Add `domains` config to allow limiting from which domains images will be analyzed
+- User `after_commit` to enqueued analyze job
+
 ## [0.4.1] - 2021-07-22
 
 - Do not discard the specified `style` attribute

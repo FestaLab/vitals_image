@@ -29,6 +29,7 @@ module VitalsImage
     config.vitals_image                                 = ActiveSupport::OrderedOptions.new
     config.vitals_image.optimizers                      = [VitalsImage::Optimizer::Blank, VitalsImage::Optimizer::Variable, VitalsImage::Optimizer::Invariable, VitalsImage::Optimizer::Url]
     config.vitals_image.analyzers                       = [VitalsImage::Analyzer::UrlAnalyzer]
+    config.vitals_image.domains                         = []
 
     config.eager_load_namespaces << VitalsImage
 
@@ -40,8 +41,6 @@ module VitalsImage
         VitalsImage.optimizers                 = app.config.vitals_image.optimizers                 || []
         VitalsImage.analyzers                  = app.config.vitals_image.analyzers                  || []
 
-        VitalsImage.mobile_width               = app.config.vitals_image.mobile_width               || :original
-        VitalsImage.desktop_width              = app.config.vitals_image.desktop_width              || :original
         VitalsImage.resolution                 = app.config.vitals_image.resolution                 || 2
         VitalsImage.lazy_loading               = app.config.vitals_image.lazy_loading               || :native
         VitalsImage.lazy_loading_placeholder   = app.config.vitals_image.lazy_loading_placeholder   || VitalsImage::Base::TINY_GIF
@@ -54,6 +53,7 @@ module VitalsImage
         VitalsImage.jpeg_conversion            = app.config.vitals_image.jpeg_conversion
         VitalsImage.jpeg_optimization          = app.config.vitals_image.jpeg_optimization
         VitalsImage.png_optimization           = app.config.vitals_image.png_optimization
+        VitalsImage.domains                    = app.config.vitals_image.domains                    || []
 
         VitalsImage.skip_ssl_verification      = app.config.vitals_image.skip_ssl_verification      || false
       end

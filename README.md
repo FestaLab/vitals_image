@@ -134,6 +134,7 @@ The following configuration options are available. The defaults were chosen for 
 | jpeg_optimization               | see below      | see below               | Hash of options to pass to active storage when optimizing a JPEG. |
 | png_optimization                | see below      | see below               | Hash of options to pass to active storage when optimizing a PNG. |
 | active_storage_route            | `:inherited`   | `:inherited`            | Defines how urls of active storage images will be generated. If `inherited` it will use the same as active storage. Other valid options are `redirect`, `proxy` and `public`. Whatever is set here can be overriden in the helper. |
+| domains                         | empty          | -                       | Limits the domains that vitals image source can be created from |
 
 Minimagick
 ```ruby
@@ -164,8 +165,6 @@ These can be configured in your environment files, just like any other rails set
 ```
 Rails.application.configure do |config|
   config.vitals_image.image_library = :vips
-  config.vitals_image.mobile_width = 410
-  config.vitals_image.desktop_width = 1264
   config.vitals_image.lazy_loading = :lozad
   config.vitals_image.require_alt_attribute = true
   config.vitals_image.check_for_white_background = true

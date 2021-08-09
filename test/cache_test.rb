@@ -44,5 +44,21 @@ module VitalsImage
       assert Time.at(data[cat].expires_at) < Time.now + 61.seconds
       assert_nil data[dog].expires_at
     end
+
+    test "that only sources from allowed domains will be analyzed" do
+      VitalsImage.domains = ["festalab.com.br"]
+
+      assert_no_difference("VitalsImage::Source.count") do
+        source = Cache.instance.locate("https://joliz.com.br/bird.jpg")
+        assert_not source.metadata["identified"]
+      end
+
+      assert_difference("VitalsImage::Source.count", 1) do
+        source = Cache.instance.locate("https://festalab.com.br/fish.jpg")
+        assert source.metadata["identified"]
+      end
+    ensure
+      VitalsImage.domains = []
+    end
   end
 end
