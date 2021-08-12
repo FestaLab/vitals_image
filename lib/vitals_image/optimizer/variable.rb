@@ -81,7 +81,12 @@ module VitalsImage
       end
 
       def resize_and_flatten(defaults = {})
-        resize  = resize_mode != :resize_and_pad ? dimensions : dimensions.push(background: [255])
+        if resize_mode == :resize_and_pad && VitalsImage.image_library == :vips
+          resize = dimensions.push(background: [255])
+        else
+          resize = dimensions
+        end
+
         defaults.merge "#{resize_mode}": resize
       end
 
