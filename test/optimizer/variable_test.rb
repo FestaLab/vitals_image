@@ -125,14 +125,16 @@ module VitalsImage
     end
 
     test "that a height and width can be chosen for an existing image of an object in a white background and it will be padded" do
-      existing_jpeg_with_dimensions(150, 150, white_background: true) do |image|
-        assert_equal [300, 300], image.src.variation.transformations[:resize_and_pad]
+      with_image_library(:mini_magick) do
+        existing_jpeg_with_dimensions(150, 150, white_background: true) do |image|
+          assert_equal [300, 300], image.src.variation.transformations[:resize_and_pad]
+        end
       end
 
-      VitalsImage.image_library = :vips
-
-      existing_jpeg_with_dimensions(150, 150, white_background: true) do |image|
-        assert_equal [300, 300, background: [255]], image.src.variation.transformations[:resize_and_pad]
+      with_image_library(:vips) do
+        existing_jpeg_with_dimensions(150, 150, white_background: true) do |image|
+          assert_equal [300, 300, background: [255]], image.src.variation.transformations[:resize_and_pad]
+        end
       end
     end
 

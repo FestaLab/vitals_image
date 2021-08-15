@@ -21,3 +21,12 @@ end
 def create_file_blob(filename:, content_type:, metadata: nil)
   ActiveStorage::Blob.create_and_upload! io: file_fixture(filename).open, filename: filename, content_type: content_type, metadata: metadata
 end
+
+def with_image_library(library)
+  previous_library = VitalsImage.image_library
+  VitalsImage.image_library = library
+
+  yield
+ensure
+  VitalsImage.image_library = previous_library
+end
