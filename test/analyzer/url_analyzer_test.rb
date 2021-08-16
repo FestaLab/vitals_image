@@ -27,15 +27,5 @@ module VitalsImage
         assert vitals_image_sources(:cat).analyzed
       end
     end
-
-    private
-      def with_image_library(library)
-        previous_library = VitalsImage.image_library
-        VitalsImage.image_library = library
-
-        yield
-      ensure
-        VitalsImage.image_library = previous_library
-      end
   end
 end
