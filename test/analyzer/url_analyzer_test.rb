@@ -27,5 +27,17 @@ module VitalsImage
         assert vitals_image_sources(:cat).analyzed
       end
     end
+
+    test "that invalid urls are ignored" do
+      with_image_library(:vips) do
+        Analyzer::UrlAnalyzer.new(vitals_image_sources(:invalid)).analyze
+
+        assert_nil vitals_image_sources(:invalid).width
+        assert_nil vitals_image_sources(:invalid).height
+        assert_nil vitals_image_sources(:invalid).content_type
+        assert vitals_image_sources(:invalid).analyzed
+        assert_not vitals_image_sources(:invalid).identified
+      end
+    end
   end
 end

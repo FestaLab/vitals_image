@@ -161,6 +161,21 @@ module VitalsImage
       end
     end
 
+    test "that invalid images are configured correctly" do
+      url = vitals_image_sources(:invalid).key
+      image = VitalsImage::Optimizer::Url.new(url, width: 100, height: 100)
+      assert_equal "https://festalab-fixtures.s3.amazonaws.com/invalid.jpg", image.src
+
+      opts = image.html_options
+      assert_equal 100, opts["width"]
+      assert_equal 100, opts["height"]
+      assert_not opts.key?("style")
+      assert_equal "lazy", opts["loading"]
+      assert_equal "async", opts["decoding"]
+      assert_not opts.key?("data")
+      assert_equal "vitals-image", opts["class"]
+    end
+
     private
       def new_source_with_dimensions(width, height, style: nil)
         url = vitals_image_sources(:cat).key

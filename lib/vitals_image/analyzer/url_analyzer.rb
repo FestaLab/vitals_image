@@ -13,7 +13,9 @@ module VitalsImage
       image = open(file)
       mime  = Marcel::MimeType.for(Pathname.new file.path)
 
-      source.update width: image.width, height: image.height, analyzed: true, content_type: mime
+      source.update! width: image.width, height: image.height, analyzed: true, content_type: mime
+    rescue OpenURI::HTTPError
+      source.update! analyzed: true, identified: false
     end
 
     private
@@ -42,9 +44,6 @@ module VitalsImage
         end
 
         downloaded
-      rescue
-        logger.error "Failed to download #{source.key}"
-        raise
       end
 
       def ssl_verify_mode

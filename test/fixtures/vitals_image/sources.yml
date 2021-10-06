@@ -6,3 +6,7 @@ dog:
 cat:
   key: "https://festalab-fixtures.s3.amazonaws.com/cat.jpg"
   metadata: '{"analyzed":false, "identified": true}'
+
+invalid:
+  key: "https://festalab-fixtures.s3.amazonaws.com/invalid.jpg"
+  metadata: '{"analyzed":false, "identified": false}'
