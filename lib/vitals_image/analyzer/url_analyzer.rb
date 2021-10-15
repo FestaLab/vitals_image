@@ -34,13 +34,13 @@ module VitalsImage
       def download
         uri = URI.parse(source.key)
         io = uri.open(ssl_verify_mode: ssl_verify_mode)
-        downloaded = Tempfile.new([File.basename(uri.path), File.extname(uri.path)])
+        downloaded = Tempfile.new([File.basename(uri.path), File.extname(uri.path)], binmode: true)
 
         if io.is_a?(Tempfile)
           FileUtils.mv io.path, downloaded.path
         else
           # StringIO
-          File.write(downloaded.path, io.string)
+          File.write(downloaded.path, io.string, mode: "wb")
         end
 
         downloaded
