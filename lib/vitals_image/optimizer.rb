@@ -65,7 +65,7 @@ module VitalsImage
       end
 
       def width
-        if !analyzed? || fixed_dimensions?
+        if !identified? || !analyzed? || fixed_dimensions?
           requested_width
         else
           (original_width * scale).round
@@ -73,7 +73,7 @@ module VitalsImage
       end
 
       def height
-        if !analyzed? || fixed_dimensions?
+        if !identified? || !analyzed? || fixed_dimensions?
           requested_height
         else
           (original_height * scale).round
@@ -105,6 +105,11 @@ module VitalsImage
         @options["height"].to_f if @options["height"]
       end
 
+
+      # Override this method in a concrete subclass. Have it return true if width and height are available
+      def identified?
+        raise NotImplementedError
+      end
 
       # Override this method in a concrete subclass. Have it return true if width and height are available
       def analyzed?

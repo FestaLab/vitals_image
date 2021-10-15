@@ -27,6 +27,10 @@ module VitalsImage
         @source.metadata
       end
 
+      def identified?
+        metadata[:identified]
+      end
+
       def analyzed?
         metadata[:analyzed]
       end
