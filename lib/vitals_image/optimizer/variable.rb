@@ -28,7 +28,7 @@ module VitalsImage
       end
 
       def identified?
-        metadata[:identified]
+        true
       end
 
       def analyzed?
