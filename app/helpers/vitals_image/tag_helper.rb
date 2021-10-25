@@ -16,19 +16,27 @@ module VitalsImage
       end
     end
 
-    private
-      def vitals_image_url(source, options)
-        active_storage_route = options.delete("active_storage_route") || VitalsImage.active_storage_route
+    def vitals_image_url(source, options = {})
+      active_storage_route = options.delete("active_storage_route") || options.delete(:active_storage_route) || VitalsImage.active_storage_route
 
-        case active_storage_route
-        when :redirect
+      case active_storage_route
+      when :redirect
+        rails_storage_redirect_path(source)
+      when :proxy
+        rails_storage_proxy_path(source)
+      when :public
+        public_url_for(source)
+      else
+        url_for(source)
+      end
+    end
+
+    private
+      def public_url_for(source)
+        if Rails.application.config.active_storage.service.in?([:local, :test]) || !source.is_a?(ActiveStorage::VariantWithRecord)
           rails_storage_redirect_path(source)
-        when :proxy
-          rails_storage_proxy_path(source)
-        when :public
-          source.is_a?(ActiveStorage::VariantWithRecord) ? source.processed.url : source.url
         else
-          url_for(source)
+          source.processed.url
         end
       end
   end
