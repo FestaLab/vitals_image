@@ -33,10 +33,12 @@ module VitalsImage
 
     private
       def public_url_for(source)
-        if Rails.application.config.active_storage.service.in?([:local, :test]) || !source.is_a?(ActiveStorage::VariantWithRecord)
-          rails_storage_redirect_path(source)
-        else
+        if Rails.application.config.active_storage.service =~ /(local|test)/
+          url_for(source)
+        elsif source.is_a?(ActiveStorage::VariantWithRecord)
           source.processed.url
+        else
+          source.url
         end
       end
   end
