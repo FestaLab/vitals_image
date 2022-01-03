@@ -25,6 +25,7 @@ module VitalsImage
   mattr_accessor :jpeg_conversion
   mattr_accessor :jpeg_optimization
   mattr_accessor :png_optimization
+  mattr_accessor :webp_conversion
   mattr_accessor :active_storage_route
   mattr_accessor :domains
 

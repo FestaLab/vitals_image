@@ -133,6 +133,7 @@ The following configuration options are available. The defaults were chosen for 
 | jpeg_conversion                 | see below      | see below               | Hash of options to pass to active storage when converting other image formats to JPEG and optimizing. |
 | jpeg_optimization               | see below      | see below               | Hash of options to pass to active storage when optimizing a JPEG. |
 | png_optimization                | see below      | see below               | Hash of options to pass to active storage when optimizing a PNG. |
+| webp_conversion                 | see below      | see below               | Hash of options to pass to active storage when converting other image formats to WEBP and optimizing. |
 | active_storage_route            | `:inherited`   | `:inherited`            | Defines how urls of active storage images will be generated. If `inherited` it will use the same as active storage. Other valid options are `redirect`, `proxy` and `public`. Whatever is set here can be overriden in the helper. |
 | domains                         | empty          | -                       | Limits the domains that vitals image source can be created from |
 
@@ -146,6 +147,9 @@ Minimagick
 
 # png_optimization:
 { saver: { strip: true, quality: 00 } }
+
+# webp_optimization:
+{ saver: { strip: true, quality: 75, define: { webp: { lossless: false, alpha_quality: 85, thread_level: 1 } } }, format: "webp" }
 ```
 
 Vips
@@ -158,6 +162,9 @@ Vips
 
 # png_optimization:
 { saver: { strip: true, compression: 9 } }
+
+# webp conversion:
+{ saver: { strip: true, quality: 75, lossless: false, alpha_q: 85, reduction_effort: 6, smart_subsample: true }, format: "webp" }
 ```
 
 These can be configured in your environment files, just like any other rails settings:

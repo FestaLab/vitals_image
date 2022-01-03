@@ -53,6 +53,7 @@ module VitalsImage
         VitalsImage.jpeg_conversion            = app.config.vitals_image.jpeg_conversion
         VitalsImage.jpeg_optimization          = app.config.vitals_image.jpeg_optimization
         VitalsImage.png_optimization           = app.config.vitals_image.png_optimization
+        VitalsImage.webp_conversion            = app.config.vitals_image.webp_conversion
         VitalsImage.domains                    = app.config.vitals_image.domains                    || []
 
         VitalsImage.skip_ssl_verification      = app.config.vitals_image.skip_ssl_verification      || false
@@ -73,10 +74,12 @@ module VitalsImage
           VitalsImage.jpeg_conversion   ||= { saver: { strip: true, quality: 80, interlace: true, optimize_coding: true, trellis_quant: true, quant_table: 3, background: 255 }, format: "jpg" }
           VitalsImage.jpeg_optimization ||= { saver: { strip: true, quality: 80, interlace: true, optimize_coding: true, trellis_quant: true, quant_table: 3 } }
           VitalsImage.png_optimization  ||= { saver: { strip: true, compression: 9 } }
+          VitalsImage.webp_conversion   ||= { saver: { strip: true, quality: 75, lossless: false, alpha_q: 85, reduction_effort: 6, smart_subsample: true }, format: "webp" }
         else
           VitalsImage.jpeg_conversion   ||= { saver: { strip: true, quality: 80, interlace: "JPEG", sampling_factor: "4:2:0", colorspace: "sRGB", background: :white, flatten: true, alpha: :off }, format: "jpg" }
           VitalsImage.jpeg_optimization ||= { saver: { strip: true, quality: 80, interlace: "JPEG", sampling_factor: "4:2:0", colorspace: "sRGB" } }
           VitalsImage.png_optimization  ||= { saver: { strip: true, quality: 75 } }
+          VitalsImage.webp_conversion   ||= { saver: { strip: true, quality: 75, define: { webp: { lossless: false, alpha_quality: 85, thread_level: 1 } } }, format: "webp" }
         end
       end
     end
