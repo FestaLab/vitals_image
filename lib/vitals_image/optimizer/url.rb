@@ -3,12 +3,7 @@
 module VitalsImage
   class Optimizer::Url < Optimizer
     def self.accept?(source)
-      uri = URI.parse(source)
-      %w( http https ).include?(uri.scheme)
-    rescue URI::BadURIError
-      false
-    rescue URI::InvalidURIError
-      false
+      source.match(/^http/)
     end
 
     private
