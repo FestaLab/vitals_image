@@ -50,7 +50,7 @@ module VitalsImage
       end
 
       def resize_mode
-        @options[:resize_mode] || @source.metadata["white_background"] ? :resize_and_pad : :resize_to_fill
+        @options["resize_mode"] || @source.metadata["white_background"] ? :resize_and_pad : :resize_to_fill
       end
 
       def variant
@@ -86,7 +86,7 @@ module VitalsImage
 
       def resize_and_flatten(defaults = {})
         if resize_mode == :resize_and_pad && VitalsImage.image_library == :vips
-          resize = dimensions.push(background: [255])
+          resize = dimensions.push(background: [@options["background"] || 255])
         else
           resize = dimensions
         end
