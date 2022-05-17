@@ -21,13 +21,14 @@ require "vitals_image/optimizer/blank"
 require "vitals_image/optimizer/url"
 require "vitals_image/optimizer/variable"
 require "vitals_image/optimizer/invariable"
+require "vitals_image/optimizer/unoptimizable"
 
 module VitalsImage
   class Engine < ::Rails::Engine
     isolate_namespace VitalsImage
 
     config.vitals_image                                 = ActiveSupport::OrderedOptions.new
-    config.vitals_image.optimizers                      = [VitalsImage::Optimizer::Blank, VitalsImage::Optimizer::Variable, VitalsImage::Optimizer::Invariable, VitalsImage::Optimizer::Url]
+    config.vitals_image.optimizers                      = [VitalsImage::Optimizer::Blank, VitalsImage::Optimizer::Variable, VitalsImage::Optimizer::Invariable, VitalsImage::Optimizer::Url, VitalsImage::Optimizer::Unoptimizable]
     config.vitals_image.analyzers                       = [VitalsImage::Analyzer::UrlAnalyzer]
     config.vitals_image.domains                         = []
 

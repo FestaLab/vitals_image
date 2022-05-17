@@ -18,12 +18,6 @@ module VitalsImage
       assert VitalsImage::Base.optimizer(blob).is_a?(VitalsImage::Optimizer::Invariable)
     end
 
-    test "that an exception is raised if no optimizers are available for the specified source" do
-      assert_raise VitalsImage::UnoptimizableError do
-        VitalsImage::Base.optimizer("/some-asset.pdf")
-      end
-    end
-
     test "that the correct analyzer is chosen" do
       assert VitalsImage::Base.analyzer(vitals_image_sources(:cat)).is_a?(VitalsImage::Analyzer::UrlAnalyzer)
     end
