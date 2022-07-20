@@ -209,6 +209,22 @@ module VitalsImage
       assert_equal blob, VitalsImage::Optimizer::Variable.new(blob, width: 100).src
     end
 
+    test "that resize mode is respected" do
+      # White Background
+      blob = create_file_blob(filename: "dog.jpg", content_type: "image/jpg", metadata: { analyzed: true, width: 1401, height: 2102, white_background: :white_background })
+      image = VitalsImage::Optimizer::Variable.new(blob, width: 300, height: 300)
+      assert_equal :resize_and_pad, image.send(:resize_mode)
+
+      # White Background defining resize method
+      image = VitalsImage::Optimizer::Variable.new(blob, width: 300, height: 300, resize_mode: :resize_to_fit)
+      assert_equal :resize_to_fit, image.send(:resize_mode)
+
+      # Non-white Background
+      blob = create_file_blob(filename: "dog.jpg", content_type: "image/jpg", metadata: { analyzed: true, width: 1401, height: 2102 })
+      image = VitalsImage::Optimizer::Variable.new(blob, width: 300, height: 300)
+      assert_equal :resize_to_fill, image.send(:resize_mode)
+    end
+
     private
       def new_jpeg_with_dimensions(width, height)
         blob = create_file_blob(filename: "cat.jpg", content_type: "image/jpg")
