@@ -50,7 +50,13 @@ module VitalsImage
       end
 
       def resize_mode
-        @options["resize_mode"] || @source.metadata["white_background"] ? :resize_and_pad : :resize_to_fill
+        if @options["resize_mode"].present?
+          @options["resize_mode"]
+        elsif @source.metadata["white_background"]
+          :resize_and_pad
+        else
+          :resize_to_fill
+        end
       end
 
       def variant
