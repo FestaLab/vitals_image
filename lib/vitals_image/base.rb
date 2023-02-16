@@ -2,7 +2,7 @@
 
 module VitalsImage
   class Base
-    TINY_GIF = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+    TINY_GIF = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7".freeze
 
     def self.optimizer(object, options = {})
       klass = VitalsImage.optimizers.detect { |optimizer| optimizer.accept?(object) }

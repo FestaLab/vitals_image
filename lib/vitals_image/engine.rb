@@ -22,6 +22,7 @@ require "vitals_image/optimizer/url"
 require "vitals_image/optimizer/variable"
 require "vitals_image/optimizer/invariable"
 require "vitals_image/optimizer/unoptimizable"
+require "vitals_image/tiny_gif"
 
 module VitalsImage
   class Engine < ::Rails::Engine
