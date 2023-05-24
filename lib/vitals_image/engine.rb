@@ -74,12 +74,12 @@ module VitalsImage
       config.after_initialize do |app|
         if VitalsImage.image_library == :vips
           VitalsImage.jpeg_conversion   ||= { saver: { strip: true, quality: 80, interlace: true, optimize_coding: true, trellis_quant: true, quant_table: 3, background: 255 }, format: "jpg" }
-          VitalsImage.jpeg_optimization ||= { saver: { strip: true, quality: 80, interlace: true, optimize_coding: true, trellis_quant: true, quant_table: 3 } }
+          VitalsImage.jpeg_optimization ||= { saver: { strip: true, quality: 80, interlace: true, optimize_coding: true, trellis_quant: true, quant_table: 3 }, format: "jpg" }
           VitalsImage.png_optimization  ||= { saver: { strip: true, compression: 9 } }
           VitalsImage.webp_conversion   ||= { saver: { strip: true, quality: 75, lossless: false, alpha_q: 85, reduction_effort: 6, smart_subsample: true }, format: "webp" }
         else
           VitalsImage.jpeg_conversion   ||= { saver: { strip: true, quality: 80, interlace: "JPEG", sampling_factor: "4:2:0", colorspace: "sRGB", background: :white, flatten: true, alpha: :off }, format: "jpg" }
-          VitalsImage.jpeg_optimization ||= { saver: { strip: true, quality: 80, interlace: "JPEG", sampling_factor: "4:2:0", colorspace: "sRGB" } }
+          VitalsImage.jpeg_optimization ||= { saver: { strip: true, quality: 80, interlace: "JPEG", sampling_factor: "4:2:0", colorspace: "sRGB" }, format: "jpg" }
           VitalsImage.png_optimization  ||= { saver: { strip: true, quality: 75 } }
           VitalsImage.webp_conversion   ||= { saver: { strip: true, quality: 75, define: { webp: { lossless: false, alpha_quality: 85, thread_level: 1 } } }, format: "webp" }
         end
