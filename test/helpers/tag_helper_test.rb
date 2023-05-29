@@ -117,8 +117,9 @@ module VitalsImage
     test "that different route strategies can be used" do
       blob = create_file_blob(filename: "dog.jpg", content_type: "image/jpg", metadata: { analyzed: false })
 
-      assert_equal %{<img class="vitals-image" loading="lazy" decoding="async" src="#{rails_storage_redirect_path(blob)}" />}, vitals_image_tag(blob, active_storage_route: :redirect)
-      assert_equal %{<img class="vitals-image" loading="lazy" decoding="async" src="#{rails_storage_proxy_path(blob)}" />}, vitals_image_tag(blob, active_storage_route: :proxy)
+        assert_equal %{<img class="vitals-image" loading="lazy" decoding="async" src="#{rails_storage_redirect_path(blob)}" />}, vitals_image_tag(blob, active_storage_route: :redirect)
+        assert_equal %{<img class="vitals-image" loading="lazy" decoding="async" src="#{rails_storage_proxy_path(blob)}" />}, vitals_image_tag(blob, active_storage_route: :proxy)
+        assert_equal %{<img class="vitals-image" loading="lazy" decoding="async" src="/images/vitals_image/logo.svg" />}, vitals_image_tag("vitals_image/logo.svg", active_storage_route: :public)
     end
 
     private
