@@ -8,5 +8,10 @@ module VitalsImage
       gif = TinyGif.instance
       assert_equal Base::TINY_GIF, gif.processed.url
     end
+
+    test "match" do
+      gif = TinyGif.instance
+      assert gif.match("data:image/gif")
+    end
   end
 end

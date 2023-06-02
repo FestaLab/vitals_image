@@ -18,6 +18,7 @@ module VitalsImage
 
     def vitals_image_url(source, options = {})
       active_storage_route = options.delete("active_storage_route") || options.delete(:active_storage_route) || VitalsImage.active_storage_route
+      return source.url if source.is_a?(VitalsImage::TinyGif)
 
       case active_storage_route
       when :redirect

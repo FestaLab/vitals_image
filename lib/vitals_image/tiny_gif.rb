@@ -3,6 +3,7 @@
 module VitalsImage
   class TinyGif
     include Singleton
+    delegate :match, to: :url
 
     def processed
       self
