@@ -48,7 +48,7 @@ module VitalsImage
         VitalsImage.lazy_loading_placeholder   = app.config.vitals_image.lazy_loading_placeholder   || VitalsImage::Base::TINY_GIF
         VitalsImage.require_alt_attribute      = app.config.vitals_image.require_alt_attribute      || false
 
-        VitalsImage.check_for_white_background = app.config.vitals_image.check_for_white_background || true
+        VitalsImage.check_for_white_background = app.config.vitals_image.check_for_white_background || false
 
         VitalsImage.active_storage_route       = app.config.vitals_image.active_storage_route       || :inherited
         VitalsImage.convert_to_jpeg            = app.config.vitals_image.convert_to_jpeg            || false
