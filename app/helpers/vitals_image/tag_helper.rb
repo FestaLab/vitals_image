@@ -14,6 +14,9 @@ module VitalsImage
         url = vitals_image_url(optimizer.src, optimizer.html_options)
         image_tag url, optimizer.html_options
       end
+    rescue StandardError => error
+      Sentry.capture_exception(error) if Rails.env.production?
+      image_tag Base::TINY_GIF
     end
 
     def vitals_image_url(source, options = {})
