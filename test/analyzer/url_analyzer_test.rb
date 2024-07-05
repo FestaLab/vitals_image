@@ -39,5 +39,15 @@ module VitalsImage
         assert_not vitals_image_sources(:invalid).identified
       end
     end
+
+    test "file name too long" do
+      vitals_image_sources(:dog).update_column :key, "https://festalab-fixtures.s3.amazonaws.com/dog-#{'a' * 255}.jpg"
+
+      with_image_library(:vips) do
+        assert_nothing_raised do
+          Analyzer::UrlAnalyzer.new(vitals_image_sources(:dog)).analyze
+        end
+      end
+    end
   end
 end

@@ -9,7 +9,7 @@ module VitalsImage
     end
 
     def analyze
-      file = download
+      file  = download
       image = open(file)
       mime  = Marcel::MimeType.for(Pathname.new file.path)
 
@@ -32,9 +32,10 @@ module VitalsImage
       end
 
       def download
-        uri = URI.parse(source.key)
-        io = uri.open(ssl_verify_mode: ssl_verify_mode)
-        downloaded = Tempfile.new([File.basename(uri.path), File.extname(uri.path)], binmode: true)
+        uri        = URI.parse(source.key)
+        io         = uri.open(ssl_verify_mode: ssl_verify_mode)
+        uri_path   = reduce_uri_path(uri.path)
+        downloaded = Tempfile.new([File.basename(uri_path), File.extname(uri_path)], binmode: true)
 
         if io.is_a?(Tempfile)
           FileUtils.mv io.path, downloaded.path
@@ -44,6 +45,13 @@ module VitalsImage
         end
 
         downloaded
+      end
+
+      def reduce_uri_path(uri_path)
+        filename, extension = uri_path.split(".")
+        filename = filename[0..200]
+
+        [filename, extension].join(".")
       end
 
       def ssl_verify_mode
