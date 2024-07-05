@@ -34,7 +34,7 @@ module VitalsImage
       def download
         uri        = URI.parse(source.key)
         io         = uri.open(ssl_verify_mode: ssl_verify_mode)
-        uri_path   = reduce_uri_path(uri.path)
+        uri_path   = truncate_uri_path(uri.path)
         downloaded = Tempfile.new([File.basename(uri_path), File.extname(uri_path)], binmode: true)
 
         if io.is_a?(Tempfile)
@@ -47,7 +47,7 @@ module VitalsImage
         downloaded
       end
 
-      def reduce_uri_path(uri_path)
+      def truncate_uri_path(uri_path)
         filename, extension = uri_path.split(".")
         filename = filename[0..200]
 

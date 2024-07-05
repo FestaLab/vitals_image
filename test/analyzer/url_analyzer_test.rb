@@ -40,7 +40,7 @@ module VitalsImage
       end
     end
 
-    test "file name too long" do
+    test "file name too long will be truncated" do
       vitals_image_sources(:dog).update_column :key, "https://festalab-fixtures.s3.amazonaws.com/dog-#{'a' * 255}.jpg"
 
       with_image_library(:vips) do
