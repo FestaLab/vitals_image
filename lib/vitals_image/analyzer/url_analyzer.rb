@@ -48,8 +48,9 @@ module VitalsImage
       end
 
       def truncate_uri_path(uri_path)
-        filename, extension = uri_path.split(".")
-        filename = filename[0..200]
+        parts     = uri_path.split(".")
+        filename  = parts.first[0..200]
+        extension = parts.last
 
         [filename, extension].join(".")
       end
