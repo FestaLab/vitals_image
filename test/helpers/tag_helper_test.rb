@@ -119,7 +119,7 @@ module VitalsImage
 
       assert_equal %{<img class="vitals-image" loading="lazy" decoding="async" src="#{rails_storage_redirect_path(blob)}" />}, vitals_image_tag(blob, active_storage_route: :redirect)
       assert_equal %{<img class="vitals-image" loading="lazy" decoding="async" src="#{rails_storage_proxy_path(blob)}" />}, vitals_image_tag(blob, active_storage_route: :proxy)
-      assert_equal %{<img class="vitals-image" loading="lazy" decoding="async" src="/images/vitals_image/logo.svg" />}, vitals_image_tag("vitals_image/logo.svg", active_storage_route: :public)
+      assert_equal %{<img class="vitals-image" loading="lazy" decoding="async" src="http://test.host/images/vitals_image/logo.svg" />}, vitals_image_tag("vitals_image/logo.svg", active_storage_route: :public)
     end
 
     test "that it handles tiny gif" do

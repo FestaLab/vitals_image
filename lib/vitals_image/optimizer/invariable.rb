@@ -38,7 +38,7 @@ module VitalsImage
       end
 
       def analyzed?
-        metadata[:analyzed]
+        metadata[:analyzed] && metadata[:width] && metadata[:height]
       end
   end
 end
