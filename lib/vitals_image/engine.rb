@@ -23,6 +23,8 @@ require "vitals_image/optimizer/variable"
 require "vitals_image/optimizer/invariable"
 require "vitals_image/optimizer/unoptimizable"
 require "vitals_image/tiny_gif"
+require_relative "../../app/helpers/vitals_image/tag_helper"
+
 
 module VitalsImage
   class Engine < ::Rails::Engine
