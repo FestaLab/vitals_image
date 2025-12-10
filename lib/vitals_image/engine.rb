@@ -86,10 +86,10 @@ module VitalsImage
       end
     end
 
-    initializer "vitals_image.action_controller" do
-      ActiveSupport.on_load :action_controller do
-        helper VitalsImage::TagHelper
-      end
-    end
+    config.to_prepare do
+     ActiveSupport.on_load :action_controller do
+       helper VitalsImage::TagHelper
+     end
+   end
   end
 end
