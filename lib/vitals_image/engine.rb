@@ -34,8 +34,6 @@ module VitalsImage
     config.vitals_image.domains                         = []
 
     config.eager_load_namespaces << VitalsImage
-    # Add engine helpers to Rails' paths: autoload in development, eager load in production
-    config.paths.add "app/helpers/vitals_image/tag_helper", eager_load: true, autoload: true
 
     initializer "vitals_image.configs" do
       config.after_initialize do |app|
