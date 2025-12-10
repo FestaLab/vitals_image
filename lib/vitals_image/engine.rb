@@ -23,6 +23,7 @@ require "vitals_image/optimizer/variable"
 require "vitals_image/optimizer/invariable"
 require "vitals_image/optimizer/unoptimizable"
 require "vitals_image/tiny_gif"
+require_relative "../../app/helpers/vitals_image/tag_helper"
 
 module VitalsImage
   class Engine < ::Rails::Engine
@@ -86,10 +87,10 @@ module VitalsImage
       end
     end
 
-    config.to_prepare do
-     ActiveSupport.on_load :action_controller do
-       helper VitalsImage::TagHelper
-     end
-   end
+    initializer "vitals_image.action_controller" do
+      ActiveSupport.on_load :action_controller do
+        helper VitalsImage::TagHelper
+      end
+    end
   end
 end
